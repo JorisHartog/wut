@@ -1,0 +1,106 @@
+#!/bin/bash
+
+
+
+# Sheet [Hostnet]
+# Subject [tmux]
+# Paragraph [sessions]
+# Step [blabla: blabla]
+#
+# Sheet/Subject/Title/[Step no].head
+# Sheet/Subject/Title/[Step no].body
+
+# Exit status:
+# 0: OK
+# 1: Unimplemented
+# 2: Not initialized
+
+folder_check() {
+  if [ ! -d "$ROOT_FOLDER" ]; then
+    echo "Couldn't find wut folder. Please initialize wut:"
+    echo "  $PROGRAM init"
+    exit 2
+  fi 
+}
+
+cmd_init() {
+  if [ -d "$ROOT_FOLDER" ]; then
+    echo "Wut has already been initialized"
+  else
+    echo "Initializing wut.."
+    mkdir $ROOT_FOLDER
+  fi
+}
+
+cmd_usage() {
+  folder_check
+  cmd_version
+  echo
+  cat << EOF
+  Usage:
+      $PROGRAM init
+          Initialize new cheatsheet
+      $PROGRAM list
+          List paragraphs
+      $PROGRAM add
+	  Add a new entry
+      $PROGRAM edit [sheet] [subject]
+	  Edit an existing entry
+      $PROGRAM delete [sheet|subject]
+	  Delete an entry
+      $PROGRAM show [subject]
+	  Show all entries of a subject
+      $PROGRAM git git-command-args...
+          If the password store is a git repository, execute a git command
+          specified by git-command-args.
+      $PROGRAM help
+          Show this text.
+      $PROGRAM version
+          Show version information.
+EOF
+}
+
+cmd_version() {
+  echo $VERSION
+}
+
+cmd_show() {
+  echo "Error: unimplemented function"
+  exit 1
+}
+
+cmd_edit() {
+  echo "Error: unimplemented function"
+  exit 1
+}
+
+cmd_delete() {
+  echo "Error: unimplemented function"
+  exit 1
+}
+
+cmd_git() {
+  echo "Error: unimplemented function"
+  exit 1
+}
+
+VERSION="v0.1"
+PROGRAM="${0##*/}"
+COMMAND="$1"
+ROOT_FOLDER="$HOME/.wut"
+
+case "$1" in
+        init) shift;                    cmd_init "$@" ;;
+        list) shift;                    cmd_list "$@" ;;
+        add) shift;			cmd_add "$@" ;;
+        edit) shift;                    cmd_edit "$@" ;;
+        delete) shift;                  cmd_delete "$@" ;;
+        show) shift;                    cmd_show "$@" ;;
+        git) shift;			cmd_git "$@" ;;
+        help|--help|-h) shift;          cmd_usage "$@" ;;
+        version|--version|-v) shift;    cmd_version "$@" ;;
+	*)                              cmd_usage "$@" ;;
+esac
+
+exit 0
+
