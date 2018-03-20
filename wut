@@ -39,7 +39,7 @@ cmd_usage() {
   cat << EOF
   Usage:
       $PROGRAM init
-          Initialize new cheatsheet
+          Initialize workspace
       $PROGRAM list
           List paragraphs
       $PROGRAM add
