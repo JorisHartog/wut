@@ -29,7 +29,7 @@ cmd_usage() {
           List notes
       $PROGRAM add [sheet] [subject]
 	  Add a new note
-      $PROGRAM edit [sheet] [subject]
+      $PROGRAM edit [sheet] [subject] [note]
 	  Edit an existing note
       $PROGRAM delete [sheet|subject]
 	  Delete a note
@@ -117,8 +117,39 @@ cmd_show() {
 }
 
 cmd_edit() {
-  echo "Error: unimplemented function"
-  exit 1
+  if [ -z "$1" ]; then
+    echo "No sheetname was given. Current sheets:"
+    ls $ROOT_FOLDER
+    echo -n "Please enter sheet: "
+    read SHEET
+  else
+    SHEET=$1
+  fi
+
+  if [ -z "$2" ]; then
+    echo "Current subjects:"
+    ls $ROOT_FOLDER/$SHEET
+    echo -n "Please enter subject: "
+    read SUBJECT
+  else
+    SUBJECT=$2
+  fi
+
+  if [ -z "$3" ]; then
+    echo "Current notes:"
+    ls $ROOT_FOLDER/$SHEET/$SUBJECT
+    echo -n "Please enter note: "
+    read NOTE
+  else
+    NOTE=$3
+  fi
+
+  if [ -f $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE ]; then
+    vim $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE
+  else
+    echo "Couldn't find that note, please check if it exists with the following command:"
+    echo "  ${PROGRAM} list"
+  fi
 }
 
 cmd_delete() {
