@@ -27,7 +27,7 @@ cmd_usage() {
           Initialize workspace
       $PROGRAM list
           List notes
-      $PROGRAM add [sheet] [subject]
+      $PROGRAM add [sheet] [subject] [note]
 	  Add a new note
       $PROGRAM edit [sheet] [subject] [note]
 	  Edit an existing note
@@ -98,10 +98,14 @@ cmd_add() {
   fi
   mkdir $ROOT_FOLDER/$SHEET/$SUBJECT 2> /dev/null
 
-  echo "Current notes:"
-  ls $ROOT_FOLDER/$SHEET/$SUBJECT
-  echo -n "Please enter note: "
-  read NOTE
+  if [ -z "$3" ]; then
+    echo "Current notes:"
+    ls $ROOT_FOLDER/$SHEET/$SUBJECT
+    echo -n "Please enter note: "
+    read NOTE
+  else
+    NOTE=$3
+  fi
 
   cat > $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE << "EOF"
 # Hi! This is the place where you want to write your note. Please start
