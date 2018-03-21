@@ -64,6 +64,39 @@ cmd_version() {
   echo $VERSION
 }
 
+cmd_list() {
+  folder_check
+  SHEETS=($(ls $ROOT_FOLDER))
+  for SHEET in ${SHEETS[@]}; do
+    echo $SHEET
+    SUBJECTS=($(ls $ROOT_FOLDER/$SHEET))
+    for SUBJECT in ${SUBJECTS[@]}; do
+      PARAGRAPHS=($(ls $ROOT_FOLDER/$SHEET/$SUBJECT))
+      LAST_SUBJECT=${SUBJECTS[${#SUBJECTS[@]}-1]}
+      if [[ $SUBJECT == $LAST_SUBJECT ]]; then
+	echo "\`-${SUBJECT}"
+	SUBJECT_PREFIX="  "
+      else
+	echo "|-${SUBJECT}"
+	SUBJECT_PREFIX="| "
+      fi
+      for PARAGRAPH in ${PARAGRAPHS[@]}; do
+	LAST_PARAGRAPH=${PARAGRAPHS[${#PARAGRAPHS[@]}-1]}
+	if [[ $PARAGRAPH == $LAST_PARAGRAPH ]]; then
+	  echo "${SUBJECT_PREFIX}\`-${PARAGRAPH}"
+	else
+	  echo "${SUBJECT_PREFIX}|-${PARAGRAPH}"
+	fi
+      done
+    done
+  done
+}
+
+cmd_add() {
+  echo "Error: unimplemented function"
+  exit 1
+}
+
 cmd_show() {
   echo "Error: unimplemented function"
   exit 1
@@ -95,7 +128,7 @@ case "$1" in
         add) shift;			cmd_add "$@" ;;
         edit) shift;                    cmd_edit "$@" ;;
         delete) shift;                  cmd_delete "$@" ;;
-        show) shift;                    cmd_show "$@" ;;
+        show) shift;                    cmd_show "$@" ;; 
         git) shift;			cmd_git "$@" ;;
         help|--help|-h) shift;          cmd_usage "$@" ;;
         version|--version|-v) shift;    cmd_version "$@" ;;
