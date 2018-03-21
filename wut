@@ -1,20 +1,5 @@
 #!/bin/bash
 
-
-
-# Sheet [Hostnet]
-# Subject [tmux]
-# Paragraph [sessions]
-# Step [blabla: blabla]
-#
-# Sheet/Subject/Title/[Step no].head
-# Sheet/Subject/Title/[Step no].body
-
-# Exit status:
-# 0: OK
-# 1: Unimplemented
-# 2: Not initialized
-
 folder_check() {
   if [ ! -d "$ROOT_FOLDER" ]; then
     echo "Couldn't find wut folder. Please initialize wut:"
@@ -41,13 +26,13 @@ cmd_usage() {
       $PROGRAM init
           Initialize workspace
       $PROGRAM list
-          List paragraphs
-      $PROGRAM add
-	  Add a new entry
+          List notes
+      $PROGRAM add [sheet] [subject]
+	  Add a new note
       $PROGRAM edit [sheet] [subject]
-	  Edit an existing entry
+	  Edit an existing note
       $PROGRAM delete [sheet|subject]
-	  Delete an entry
+	  Delete a note
       $PROGRAM show [subject]
 	  Show all entries of a subject
       $PROGRAM git git-command-args...
@@ -61,7 +46,7 @@ EOF
 }
 
 cmd_version() {
-  echo $VERSION
+  echo "wut - ${VERSION}"
 }
 
 cmd_list() {
@@ -71,7 +56,7 @@ cmd_list() {
     echo $SHEET
     SUBJECTS=($(ls $ROOT_FOLDER/$SHEET))
     for SUBJECT in ${SUBJECTS[@]}; do
-      PARAGRAPHS=($(ls $ROOT_FOLDER/$SHEET/$SUBJECT))
+      NOTES=($(ls $ROOT_FOLDER/$SHEET/$SUBJECT))
       LAST_SUBJECT=${SUBJECTS[${#SUBJECTS[@]}-1]}
       if [[ $SUBJECT == $LAST_SUBJECT ]]; then
 	echo "\`-${SUBJECT}"
@@ -80,12 +65,12 @@ cmd_list() {
 	echo "|-${SUBJECT}"
 	SUBJECT_PREFIX="| "
       fi
-      for PARAGRAPH in ${PARAGRAPHS[@]}; do
-	LAST_PARAGRAPH=${PARAGRAPHS[${#PARAGRAPHS[@]}-1]}
-	if [[ $PARAGRAPH == $LAST_PARAGRAPH ]]; then
-	  echo "${SUBJECT_PREFIX}\`-${PARAGRAPH}"
+      for NOTE in ${NOTES[@]}; do
+	LAST_NOTE=${NOTES[${#NOTES[@]}-1]}
+	if [[ $NOTE == $LAST_NOTE ]]; then
+	  echo "${SUBJECT_PREFIX}\`-${NOTE}"
 	else
-	  echo "${SUBJECT_PREFIX}|-${PARAGRAPH}"
+	  echo "${SUBJECT_PREFIX}|-${NOTE}"
 	fi
       done
     done
@@ -93,8 +78,37 @@ cmd_list() {
 }
 
 cmd_add() {
-  echo "Error: unimplemented function"
-  exit 1
+  if [ -z "$1" ]; then
+    echo "No sheetname was given. Current sheets:"
+    ls $ROOT_FOLDER
+    echo -n "Please enter sheet: "
+    read SHEET
+  else
+    SHEET=$1
+  fi
+  mkdir $ROOT_FOLDER/$SHEET 2> /dev/null
+
+  if [ -z "$2" ]; then
+    echo "Current subjects:"
+    ls $ROOT_FOLDER/$SHEET
+    echo -n "Please enter subject: "
+    read SUBJECT
+  else
+    SUBJECT=$2
+  fi
+  mkdir $ROOT_FOLDER/$SHEET/$SUBJECT 2> /dev/null
+
+  echo "Current notes:"
+  ls $ROOT_FOLDER/$SHEET/$SUBJECT
+  echo -n "Please enter note: "
+  read NOTE
+
+  cat > $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE << "EOF"
+# Hi! This is the place where you want to write your note. Please start
+# every line that's code with a '$' and wut will make sure it looks a-OK!
+
+EOF
+  vim $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE
 }
 
 cmd_show() {
@@ -123,16 +137,16 @@ COMMAND="$1"
 ROOT_FOLDER="$HOME/.wut"
 
 case "$1" in
-        init) shift;                    cmd_init "$@" ;;
-        list) shift;                    cmd_list "$@" ;;
-        add) shift;			cmd_add "$@" ;;
-        edit) shift;                    cmd_edit "$@" ;;
-        delete) shift;                  cmd_delete "$@" ;;
-        show) shift;                    cmd_show "$@" ;; 
-        git) shift;			cmd_git "$@" ;;
-        help|--help|-h) shift;          cmd_usage "$@" ;;
+        init) shift;                    cmd_init    "$@" ;;
+        list) shift;                    cmd_list    "$@" ;;
+        add) shift;			cmd_add     "$@" ;;
+        edit) shift;                    cmd_edit    "$@" ;;
+        delete) shift;                  cmd_delete  "$@" ;;
+        show) shift;                    cmd_show    "$@" ;;
+        git) shift;			cmd_git     "$@" ;;
+        help|--help|-h) shift;          cmd_usage   "$@" ;;
         version|--version|-v) shift;    cmd_version "$@" ;;
-	*)                              cmd_usage "$@" ;;
+	*)                              cmd_usage   "$@" ;;
 esac
 
 exit 0
