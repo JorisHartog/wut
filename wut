@@ -5,9 +5,8 @@ PROGRAM="${0##*/}"
 COMMAND="$1"
 ROOT_FOLDER="$HOME/.wut"
 
-COLOR_RED="\031[0m"
-COLOR_BLUE="\034[0m"
-COLOR_GRAY="\036[0m"
+COLOR_RED="\033[0;31m"
+COLOR_BLUE="\033[1;34m"
 COLOR_CLEAR="\033[0m"
 
 load_history() {
@@ -172,7 +171,13 @@ cmd_show() {
   fi
 
   if [ -f $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE ]; then
-    grep "^[^#]" $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE
+    while read -r LINE; do
+      if [[ $LINE =~ ^\$ ]]; then
+	echo -e "$COLOR_RED$LINE$COLOR_CLEAR"
+      else
+	echo -e "$COLOR_BLUE$LINE$COLOR_CLEAR"
+      fi
+    done <<< "$(grep "^[^#]" $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE)"
   else
     echo "Couldn't find that note, please check if it exists with the following command:"
     echo "  ${PROGRAM} list"
