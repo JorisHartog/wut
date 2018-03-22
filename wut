@@ -5,6 +5,11 @@ PROGRAM="${0##*/}"
 COMMAND="$1"
 ROOT_FOLDER="$HOME/.wut"
 
+COLOR_RED="\031[0m"
+COLOR_BLUE="\034[0m"
+COLOR_GRAY="\036[0m"
+COLOR_CLEAR="\033[0m"
+
 load_history() {
   folder_check
   HISTORY=($(cat $ROOT_FOLDER/.history))
@@ -55,8 +60,8 @@ cmd_usage() {
 	  Add a new note
       $PROGRAM edit [sheet] [subject] [note]
 	  Edit an existing note
-      $PROGRAM delete [sheet|subject]
-	  Delete a note
+      $PROGRAM delete [sheet] [subject] [note]
+	  Delete a sheet, subject or note
       $PROGRAM show [subject]
 	  Show all entries of a subject
       $PROGRAM git git-command-args...
@@ -141,8 +146,40 @@ EOF
 }
 
 cmd_show() {
-  echo "Error: unimplemented function"
-  exit 1
+  load_history
+
+  if [ -z "$1" ]; then
+    echo -n "Please enter sheet[$SHEET]: "
+    read _SHEET
+    if [ ! -z $_SHEET ]; then SHEET=$_SHEET; fi
+  else
+    SHEET=$1
+  fi
+
+  if [ -z "$2" ]; then
+    echo -n "Please enter subject[$SUBJECT]: "
+    read _SUBJECT
+    if [ ! -z $_SUBJECT ]; then SUBJECT=$_SUBJECT; fi
+  else
+    SUBJECT=$2
+  fi
+
+  if [ -z "$3" ]; then
+    echo -n "Please enter note[$NOTE]: "
+    read _NOTE
+    if [ ! -z $_NOTE ]; then NOTE=$_NOTE; fi
+  else
+    NOTE=$3
+  fi
+
+  if [ -f $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE ]; then
+    grep "^[^#]" $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE
+  else
+    echo "Couldn't find that note, please check if it exists with the following command:"
+    echo "  ${PROGRAM} list"
+  fi
+
+  save_history
 }
 
 cmd_edit() {
@@ -175,16 +212,62 @@ cmd_edit() {
   if [ -f $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE ]; then
     vim $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE
   else
-    echo "Couldn't find that note, please check if it exists with the following command:"
+    echo "Couldn't find that note, please check if it exists using the following command:"
     echo "  ${PROGRAM} list"
+    exit 1
   fi
 
   save_history
 }
 
 cmd_delete() {
-  echo "Error: unimplemented function"
-  exit 1
+  if [ -z "$1" ]; then
+    cmd_usage
+    exit 1
+  fi
+
+  if [ -z "$2" ]; then
+    echo -n "Delete $1? Are you sure?[yes/no]:"
+    read ANSWER
+    if [ "$ANSWER" == "yes" ]; then
+      if [ -d $ROOT_FOLDER/$1 ]; then
+	rm -rf $ROOT_FOLDER/$1
+      else
+	echo "Couldn't find $1, please check if it exists using the following command:"
+	echo "  ${PROGRAM} list"
+	exit 1
+      fi
+    fi
+    exit 0
+  fi
+
+  if [ -z "$3" ]; then
+    echo -n "Delete $1/$2? Are you sure?[yes/no]:"
+    read ANSWER
+    if [ "$ANSWER" == "yes" ]; then
+      if [ -d $ROOT_FOLDER/$1/$2 ]; then
+	rm -rf $ROOT_FOLDER/$1/$2
+      else
+	echo "Couldn't find $1/$2, please check if it exists using the following command:"
+	echo "  ${PROGRAM} list"
+	exit 1
+      fi
+    fi
+    exit 0
+  else
+    echo -n "Delete $1/$2/$3? Are you sure?[yes/no]:"
+    read ANSWER
+    if [ "$ANSWER" == "yes" ]; then
+      if [ -f $ROOT_FOLDER/$1/$2/$3 ]; then
+	rm $ROOT_FOLDER/$1/$2/$3
+      else
+	echo "Couldn't find $1/$2/$3, please check if it exists using the following command:"
+	echo "  ${PROGRAM} list"
+	exit 1
+      fi
+    fi
+    exit 0
+  fi
 }
 
 cmd_git() {
