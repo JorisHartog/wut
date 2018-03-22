@@ -47,6 +47,7 @@ cmd_init() {
   else
     echo "Initializing wut.."
     mkdir $ROOT_FOLDER 2> /dev/null
+    echo ".history" > $ROOT_FOLDER/.gitignore
     cat > $ROOT_FOLDER/.history << "EOF"
 -
 -
