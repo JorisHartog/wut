@@ -36,7 +36,7 @@ save_history() {
 folder_check() {
   if [ ! -f "$ROOT_FOLDER/.history" ]; then
     echo "Couldn't find wut folder. Please initialize wut:"
-    echo "  $PROGRAM init"
+    echo "  $PROGRAM --init"
     exit 1
   fi 
 }
@@ -63,24 +63,24 @@ wut - ${VERSION}
   Usage:
       $PROGRAM [subject]
 	  Show all notes for a given subject
-      $PROGRAM init
+      $PROGRAM -i|--init
           Initialize workspace
-      $PROGRAM list
+      $PROGRAM -l|--list
           List notes
-      $PROGRAM add [sheet] [subject] [note]
+      $PROGRAM -a|--add [sheet] [subject] [note]
 	  Add a new note
-      $PROGRAM edit [sheet] [subject] [note]
+      $PROGRAM -e|--edit [sheet] [subject] [note]
 	  Edit an existing note
-      $PROGRAM delete [sheet] [subject] [note]
+      $PROGRAM -d|--delete [sheet] [subject] [note]
 	  Delete a sheet, subject or note
-      $PROGRAM show [subject]
+      $PROGRAM -s|--show [subject]
 	  Show all entries of a subject
-      $PROGRAM git git-command-args...
+      $PROGRAM -g|--git [git-command-args]
           If the password store is a git repository, execute a git command
           specified by git-command-args.
-      $PROGRAM help|wut|-h|--help
+      $PROGRAM -h|--help|wut
           Show this text.
-      $PROGRAM version|-v|--version
+      $PROGRAM -v|--version
           Show version information.
 EOF
 exit 0
@@ -193,7 +193,7 @@ cmd_show() {
     colorize_output $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE
   else
     echo "Couldn't find that note, please check if it exists with the following command:"
-    echo "  ${PROGRAM} list"
+    echo "  ${PROGRAM} --list"
   fi
 
   save_history
@@ -231,7 +231,7 @@ cmd_edit() {
     vim $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE
   else
     echo "Couldn't find that note, please check if it exists using the following command:"
-    echo "  ${PROGRAM} list"
+    echo "  ${PROGRAM} --list"
     exit 1
   fi
 
@@ -255,7 +255,7 @@ cmd_delete() {
 	rm -rf $ROOT_FOLDER/$1
       else
 	echo "Couldn't find $1, please check if it exists using the following command:"
-	echo "  ${PROGRAM} list"
+	echo "  ${PROGRAM} --list"
 	exit 1
       fi
     fi
@@ -270,7 +270,7 @@ cmd_delete() {
 	rm -rf $ROOT_FOLDER/$1/$2
       else
 	echo "Couldn't find $1/$2, please check if it exists using the following command:"
-	echo "  ${PROGRAM} list"
+	echo "  ${PROGRAM} --list"
 	exit 1
       fi
     fi
@@ -283,7 +283,7 @@ cmd_delete() {
 	rm $ROOT_FOLDER/$1/$2/$3
       else
 	echo "Couldn't find $1/$2/$3, please check if it exists using the following command:"
-	echo "  ${PROGRAM} list"
+	echo "  ${PROGRAM} --list"
 	exit 1
       fi
     fi
@@ -320,15 +320,15 @@ cmd_show_subject() {
 }
 
 case "$1" in
-        init) shift;                    cmd_init    "$@" ;;
-        list) shift;                    cmd_list    "$@" ;;
-        add) shift;			cmd_add     "$@" ;;
-        edit) shift;                    cmd_edit    "$@" ;;
-        delete) shift;                  cmd_delete  "$@" ;;
-        show) shift;                    cmd_show    "$@" ;;
-        git) shift;			cmd_git     "$@" ;;
-        help|wut|--help|-h) shift;      cmd_usage   "$@" ;;
-        version|--version|-v) shift;    cmd_version "$@" ;;
+        -i|--init) shift;       cmd_init    "$@" ;;
+        -l|--list) shift;       cmd_list    "$@" ;;
+        -a|--add) shift;	cmd_add     "$@" ;;
+        -e|--edit) shift;       cmd_edit    "$@" ;;
+        -d|--delete) shift;     cmd_delete  "$@" ;;
+        -s|--show) shift;       cmd_show    "$@" ;;
+        -g|--git) shift;	cmd_git     "$@" ;;
+        -h|--help|wut) shift;   cmd_usage   "$@" ;;
+        -v|--version) shift;	cmd_version "$@" ;;
 esac
 
 cmd_show_subject $1
