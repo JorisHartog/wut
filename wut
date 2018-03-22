@@ -28,7 +28,7 @@ folder_check() {
   if [ ! -d "$ROOT_FOLDER" ]; then
     echo "Couldn't find wut folder. Please initialize wut:"
     echo "  $PROGRAM init"
-    exit 2
+    exit 1
   fi 
 }
 
@@ -221,6 +221,8 @@ cmd_edit() {
 }
 
 cmd_delete() {
+  folder_check
+
   if [ -z "$1" ]; then
     cmd_usage
     exit 1
@@ -271,8 +273,11 @@ cmd_delete() {
 }
 
 cmd_git() {
-  echo "Error: unimplemented function"
-  exit 1
+  folder_check
+  PWD_BUF=$PWD
+  cd $ROOT_FOLDER
+  git $@
+  PWD=$PWD_BUF
 }
 
 case "$1" in
