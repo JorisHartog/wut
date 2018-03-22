@@ -47,7 +47,6 @@ EOF
 }
 
 cmd_usage() {
-  folder_check
   cmd_version
   echo
   cat << EOF
@@ -67,9 +66,9 @@ cmd_usage() {
       $PROGRAM git git-command-args...
           If the password store is a git repository, execute a git command
           specified by git-command-args.
-      $PROGRAM help
+      $PROGRAM help|wut|-h|--help
           Show this text.
-      $PROGRAM version
+      $PROGRAM version|-v|--version
           Show version information.
 EOF
 }
@@ -288,7 +287,7 @@ case "$1" in
         delete) shift;                  cmd_delete  "$@" ;;
         show) shift;                    cmd_show    "$@" ;;
         git) shift;			cmd_git     "$@" ;;
-        help|--help|-h) shift;          cmd_usage   "$@" ;;
+        help|wut|--help|-h) shift;      cmd_usage   "$@" ;;
         version|--version|-v) shift;    cmd_version "$@" ;;
 	*)                              cmd_usage   "$@" ;;
 esac
