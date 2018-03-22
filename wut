@@ -9,6 +9,16 @@ COLOR_RED="\033[0;31m"
 COLOR_BLUE="\033[1;34m"
 COLOR_CLEAR="\033[0m"
 
+colorize_output() {
+    while read -r LINE; do
+      if [[ $LINE =~ ^\$ ]]; then
+	echo -e "$COLOR_RED$LINE$COLOR_CLEAR"
+      else
+	echo -e "$COLOR_BLUE$LINE$COLOR_CLEAR"
+      fi
+    done <<< "$(grep "^[^#]" $1)"
+}
+
 load_history() {
   folder_check
   HISTORY=($(cat $ROOT_FOLDER/.history))
@@ -43,13 +53,16 @@ cmd_init() {
 -
 EOF
   fi
+  exit 0
 }
 
 cmd_usage() {
-  cmd_version
-  echo
   cat << EOF
+wut - ${VERSION}
+
   Usage:
+      $PROGRAM [subject]
+	  Show all notes for a given subject
       $PROGRAM init
           Initialize workspace
       $PROGRAM list
@@ -70,14 +83,17 @@ cmd_usage() {
       $PROGRAM version|-v|--version
           Show version information.
 EOF
+exit 0
 }
 
 cmd_version() {
   echo "wut - ${VERSION}"
+  exit 0
 }
 
 cmd_list() {
   folder_check
+
   SHEETS=($(ls $ROOT_FOLDER))
   for SHEET in ${SHEETS[@]}; do
     echo $SHEET
@@ -102,6 +118,8 @@ cmd_list() {
       done
     done
   done
+
+  exit 0
 }
 
 cmd_add() {
@@ -141,6 +159,7 @@ EOF
   vim $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE
 
   save_history
+  exit 0
 }
 
 cmd_show() {
@@ -171,19 +190,14 @@ cmd_show() {
   fi
 
   if [ -f $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE ]; then
-    while read -r LINE; do
-      if [[ $LINE =~ ^\$ ]]; then
-	echo -e "$COLOR_RED$LINE$COLOR_CLEAR"
-      else
-	echo -e "$COLOR_BLUE$LINE$COLOR_CLEAR"
-      fi
-    done <<< "$(grep "^[^#]" $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE)"
+    colorize_output $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE
   else
     echo "Couldn't find that note, please check if it exists with the following command:"
     echo "  ${PROGRAM} list"
   fi
 
   save_history
+  exit 0
 }
 
 cmd_edit() {
@@ -222,6 +236,7 @@ cmd_edit() {
   fi
 
   save_history
+  exit 0
 }
 
 cmd_delete() {
@@ -278,10 +293,30 @@ cmd_delete() {
 
 cmd_git() {
   folder_check
+
   PWD_BUF=$PWD
   cd $ROOT_FOLDER
   git $@
   PWD=$PWD_BUF
+
+  exit 0
+}
+
+cmd_show_subject() {
+  folder_check
+
+  SHEETS=($(ls $ROOT_FOLDER))
+  for SHEET in ${SHEETS[@]}; do
+    if [ -d $ROOT_FOLDER/$SHEET/$1 ]; then
+      NOTES=($(ls $ROOT_FOLDER/$SHEET/$1))
+      for NOTE in ${NOTES[@]}; do
+	colorize_output $ROOT_FOLDER/$SHEET/$1/$NOTE
+	echo "---"
+      done
+    fi
+  done
+
+  exit 0
 }
 
 case "$1" in
@@ -294,8 +329,7 @@ case "$1" in
         git) shift;			cmd_git     "$@" ;;
         help|wut|--help|-h) shift;      cmd_usage   "$@" ;;
         version|--version|-v) shift;    cmd_version "$@" ;;
-	*)                              cmd_usage   "$@" ;;
 esac
 
-exit 0
+cmd_show_subject $1
 
