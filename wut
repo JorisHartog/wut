@@ -24,7 +24,7 @@ save_history() {
 }
 
 folder_check() {
-  if [ ! -d "$ROOT_FOLDER" ]; then
+  if [ ! -f "$ROOT_FOLDER/.history" ]; then
     echo "Couldn't find wut folder. Please initialize wut:"
     echo "  $PROGRAM init"
     exit 1
@@ -32,11 +32,11 @@ folder_check() {
 }
 
 cmd_init() {
-  if [ -d "$ROOT_FOLDER" ]; then
+  if [ -f "$ROOT_FOLDER/.history" ]; then
     echo "Wut has already been initialized"
   else
     echo "Initializing wut.."
-    mkdir $ROOT_FOLDER
+    mkdir $ROOT_FOLDER 2> /dev/null
     cat > $ROOT_FOLDER/.history << "EOF"
 -
 -
