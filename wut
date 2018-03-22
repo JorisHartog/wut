@@ -1,5 +1,24 @@
 #!/bin/bash
 
+VERSION="v0.1"
+PROGRAM="${0##*/}"
+COMMAND="$1"
+ROOT_FOLDER="$HOME/.wut"
+
+load_history() {
+  folder_check
+  HISTORY=($(cat $ROOT_FOLDER/.history))
+  SHEET=${HISTORY[0]}
+  SUBJECT=${HISTORY[1]}
+  NOTE=${HISTORY[2]}
+}
+
+save_history() {
+  if [ ! -z $SHEET   ]; then echo $SHEET   >  $ROOT_FOLDER/.history; fi
+  if [ ! -z $SUBJECT ]; then echo $SUBJECT >> $ROOT_FOLDER/.history; fi
+  if [ ! -z $NOTE    ]; then echo $NOTE    >> $ROOT_FOLDER/.history; fi
+}
+
 folder_check() {
   if [ ! -d "$ROOT_FOLDER" ]; then
     echo "Couldn't find wut folder. Please initialize wut:"
@@ -14,6 +33,11 @@ cmd_init() {
   else
     echo "Initializing wut.."
     mkdir $ROOT_FOLDER
+    cat > $ROOT_FOLDER/.history << "EOF"
+-
+-
+-
+EOF
   fi
 }
 
@@ -78,31 +102,30 @@ cmd_list() {
 }
 
 cmd_add() {
+  load_history
+
   if [ -z "$1" ]; then
-    echo "No sheetname was given. Current sheets:"
-    ls $ROOT_FOLDER
-    echo -n "Please enter sheet: "
-    read SHEET
+    echo -n "Please enter sheet[$SHEET]: "
+    read _SHEET
+    if [ ! -z $_SHEET ]; then SHEET=$_SHEET; fi
   else
     SHEET=$1
   fi
   mkdir $ROOT_FOLDER/$SHEET 2> /dev/null
 
   if [ -z "$2" ]; then
-    echo "Current subjects:"
-    ls $ROOT_FOLDER/$SHEET
-    echo -n "Please enter subject: "
-    read SUBJECT
+    echo -n "Please enter subject[$SUBJECT]: "
+    read _SUBJECT
+    if [ ! -z $_SUBJECT ]; then SUBJECT=$_SUBJECT; fi
   else
     SUBJECT=$2
   fi
   mkdir $ROOT_FOLDER/$SHEET/$SUBJECT 2> /dev/null
 
   if [ -z "$3" ]; then
-    echo "Current notes:"
-    ls $ROOT_FOLDER/$SHEET/$SUBJECT
-    echo -n "Please enter note: "
-    read NOTE
+    echo -n "Please enter note[$NOTE]: "
+    read _NOTE
+    if [ ! -z $_NOTE ]; then NOTE=$_NOTE; fi
   else
     NOTE=$3
   fi
@@ -113,6 +136,8 @@ cmd_add() {
 
 EOF
   vim $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE
+
+  save_history
 }
 
 cmd_show() {
@@ -121,29 +146,28 @@ cmd_show() {
 }
 
 cmd_edit() {
+  load_history
+
   if [ -z "$1" ]; then
-    echo "No sheetname was given. Current sheets:"
-    ls $ROOT_FOLDER
-    echo -n "Please enter sheet: "
-    read SHEET
+    echo -n "Please enter sheet[$SHEET]: "
+    read _SHEET
+    if [ ! -z $_SHEET ]; then SHEET=$_SHEET; fi
   else
     SHEET=$1
   fi
 
   if [ -z "$2" ]; then
-    echo "Current subjects:"
-    ls $ROOT_FOLDER/$SHEET
-    echo -n "Please enter subject: "
-    read SUBJECT
+    echo -n "Please enter subject[$SUBJECT]: "
+    read _SUBJECT
+    if [ ! -z $_SUBJECT ]; then SUBJECT=$_SUBJECT; fi
   else
     SUBJECT=$2
   fi
 
   if [ -z "$3" ]; then
-    echo "Current notes:"
-    ls $ROOT_FOLDER/$SHEET/$SUBJECT
-    echo -n "Please enter note: "
-    read NOTE
+    echo -n "Please enter note[$NOTE]: "
+    read _NOTE
+    if [ ! -z $_NOTE ]; then NOTE=$_NOTE; fi
   else
     NOTE=$3
   fi
@@ -154,6 +178,8 @@ cmd_edit() {
     echo "Couldn't find that note, please check if it exists with the following command:"
     echo "  ${PROGRAM} list"
   fi
+
+  save_history
 }
 
 cmd_delete() {
@@ -165,11 +191,6 @@ cmd_git() {
   echo "Error: unimplemented function"
   exit 1
 }
-
-VERSION="v0.1"
-PROGRAM="${0##*/}"
-COMMAND="$1"
-ROOT_FOLDER="$HOME/.wut"
 
 case "$1" in
         init) shift;                    cmd_init    "$@" ;;
