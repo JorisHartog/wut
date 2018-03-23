@@ -77,7 +77,7 @@ wut - ${VERSION}
       $PROGRAM -s|--show [subject]
 	  Show all entries of a subject
       $PROGRAM -g|--git [git-command-args]
-          If the password store is a git repository, execute a git command
+          If the sheet store is a git repository, execute a git command
           specified by git-command-args.
       $PROGRAM -h|--help|wut
           Show this text.
