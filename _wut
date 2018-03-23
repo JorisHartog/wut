@@ -6,6 +6,18 @@ _wut()
     prev="${COMP_WORDS[COMP_CWORD-1]}"
     opts="--init --list --add --edit --delete --show --git wut --help --version"
 
+    ROOT_FOLDER="$HOME/.wut"
+    SHEETS=($(ls $ROOT_FOLDER))
+    for SHEET in ${SHEETS[@]}; do
+      SUBJECTS=($(ls $ROOT_FOLDER/$SHEET))
+      opts="$opts $SHEET"
+      for SUBJECT in ${SUBJECTS[@]}; do
+	opts="$opts $SUBJECT"
+	NOTES=$(ls $ROOT_FOLDER/$SHEET/$SUBJECT)
+	opts="$opts $NOTES"
+      done
+    done
+
     COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
     return 0
 }
