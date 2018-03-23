@@ -306,6 +306,7 @@ cmd_git() {
 cmd_show_subject() {
   folder_check
 
+  NOTE_FOUND=0
   SHEETS=($(ls $ROOT_FOLDER))
   for SHEET in ${SHEETS[@]}; do
     if [ -d $ROOT_FOLDER/$SHEET/$1 ]; then
@@ -313,9 +314,14 @@ cmd_show_subject() {
       for NOTE in ${NOTES[@]}; do
 	colorize_output $ROOT_FOLDER/$SHEET/$1/$NOTE
 	echo "---"
+	NOTE_FOUND=1
       done
     fi
   done
+
+  if [[ $NOTE_FOUND == 0 ]]; then
+    cmd_usage
+  fi
 
   exit 0
 }
