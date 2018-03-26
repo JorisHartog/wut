@@ -326,6 +326,10 @@ cmd_show_subject() {
   exit 0
 }
 
+if [ -z $1 ]; then
+  cmd_usage
+fi
+
 case "$1" in
         -i|--init) shift;       cmd_init    "$@" ;;
         -l|--list) shift;       cmd_list    "$@" ;;
