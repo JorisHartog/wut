@@ -2,7 +2,6 @@
 
 VERSION="v0.1"
 PROGRAM="${0##*/}"
-COMMAND="$1"
 ROOT_FOLDER="$HOME/.wut"
 
 COLOR_GRAY="\033[1;30m"
@@ -18,7 +17,7 @@ colorize_output() {
       else
 	echo -e "$COLOR_BLUE$LINE$COLOR_CLEAR"
       fi
-    done <<< "$(grep "^[^#]" $1)"
+    done <<< "$(grep '^[^#]' $1)"
 }
 
 load_history() {
