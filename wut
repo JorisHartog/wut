@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION="v0.2"
+VERSION="v0.3"
 PROGRAM="${0##*/}"
 ROOT_FOLDER="$HOME/.wut"
 
@@ -12,12 +12,12 @@ COLOR_CLEAR="\033[0m"
 
 colorize_output() {
     while read -r LINE; do
-      if [[ $LINE =~ ^\$ ]]; then
-	echo -e "$COLOR_RED$LINE$COLOR_CLEAR"
-      else
+      if [[ $LINE =~ ^# ]]; then
 	echo -e "$COLOR_BLUE$LINE$COLOR_CLEAR"
+      else
+	echo -e "$COLOR_RED$LINE$COLOR_CLEAR"
       fi
-    done <<< "$(grep '^[^#]' $1)"
+    done <<< "$(grep -v '^##' $1)"
 }
 
 load_history() {
@@ -152,8 +152,9 @@ cmd_add() {
   fi
 
   cat > $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE << "EOF"
-# Hi! This is the place where you want to write your note. Please start
-# every line that's code with a '$' and wut will make sure it looks a-OK!
+## Hi! This is the place where you want to write your note. Lines that start
+## with '##' will not be printed, lines that start with '#' will be printed
+## as a comment and the rest will be interpreted as code!
 
 EOF
   vim $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE
