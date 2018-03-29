@@ -327,10 +327,6 @@ cmd_show_subject() {
   exit 0
 }
 
-if [ -z $1 ]; then
-  cmd_usage
-fi
-
 case "$1" in
         -i|--init) shift;       cmd_init    "$@" ;;
         -l|--list) shift;       cmd_list    "$@" ;;
@@ -343,5 +339,9 @@ case "$1" in
         -v|--version) shift;	cmd_version "$@" ;;
 esac
 
-cmd_show_subject $1
+if [ -z $1 ]; then
+  cmd_list
+else
+  cmd_show_subject $1
+fi
 
