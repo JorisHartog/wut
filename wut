@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION="v0.1"
+VERSION="v0.2"
 PROGRAM="${0##*/}"
 ROOT_FOLDER="$HOME/.wut"
 
@@ -75,8 +75,6 @@ wut - ${VERSION}
 	  Edit an existing note
       $PROGRAM -d|--delete [sheet] [subject] [note]
 	  Delete a sheet, subject or note
-      $PROGRAM -s|--show [subject]
-	  Show all entries of a subject
       $PROGRAM -g|--git [git-command-args]
           If the sheet store is a git repository, execute a git command
           specified by git-command-args.
@@ -159,44 +157,6 @@ cmd_add() {
 
 EOF
   vim $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE
-
-  save_history
-  exit 0
-}
-
-cmd_show() {
-  load_history
-
-  if [ -z "$1" ]; then
-    echo -n "Please enter sheet[$SHEET]: "
-    read _SHEET
-    if [ ! -z $_SHEET ]; then SHEET=$_SHEET; fi
-  else
-    SHEET=$1
-  fi
-
-  if [ -z "$2" ]; then
-    echo -n "Please enter subject[$SUBJECT]: "
-    read _SUBJECT
-    if [ ! -z $_SUBJECT ]; then SUBJECT=$_SUBJECT; fi
-  else
-    SUBJECT=$2
-  fi
-
-  if [ -z "$3" ]; then
-    echo -n "Please enter note[$NOTE]: "
-    read _NOTE
-    if [ ! -z $_NOTE ]; then NOTE=$_NOTE; fi
-  else
-    NOTE=$3
-  fi
-
-  if [ -f $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE ]; then
-    colorize_output $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE
-  else
-    echo "Couldn't find that note, please check if it exists with the following command:"
-    echo "  ${PROGRAM} --list"
-  fi
 
   save_history
   exit 0
@@ -333,7 +293,6 @@ case "$1" in
         -a|--add) shift;	cmd_add     "$@" ;;
         -e|--edit) shift;       cmd_edit    "$@" ;;
         -d|--delete) shift;     cmd_delete  "$@" ;;
-        -s|--show) shift;       cmd_show    "$@" ;;
         -g|--git) shift;	cmd_git     "$@" ;;
         -h|--help|wut) shift;   cmd_usage   "$@" ;;
         -v|--version) shift;	cmd_version "$@" ;;
