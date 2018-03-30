@@ -10,9 +10,9 @@ folder.
 
 **TL;DR**
 ```bash
-git clone git@curlba.sh:jhartog/wut
-cp wut/wut /usr/bin/
-cp wut/_wut /etc/bash_completion.d/
+git clone http://curlba.sh/jhartog/wut.git
+sudo cp wut/wut /usr/bin/
+sudo cp wut/_wut /etc/bash_completion.d/
 ```
 
 *Pro tip*
