@@ -42,6 +42,16 @@ folder_check() {
   fi 
 }
 
+git_commit() {
+  if [ -x "$(command -v git)" ]; then
+    PWD_BUF=$PWD
+    cd $ROOT_FOLDER
+    git add --all
+    git commit -m "wut: $1"
+    PWD=$PWD_BUF
+  fi
+}
+
 cmd_init() {
   if [ -f "$ROOT_FOLDER/.history" ]; then
     echo "Wut has already been initialized"
@@ -54,6 +64,9 @@ cmd_init() {
 -
 -
 EOF
+    if [ -x "$(command -v git)" ]; then
+      git init $ROOT_FOLDER
+    fi
   fi
   exit 0
 }
@@ -159,6 +172,7 @@ cmd_add() {
 EOF
   vim $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE
 
+  git_commit "add $SHEET/$SUBJECT/$NOTE"
   save_history
   exit 0
 }
@@ -198,6 +212,7 @@ cmd_edit() {
     exit 1
   fi
 
+  git_commit "edit $SHEET/$SUBJECT/$NODE"
   save_history
   exit 0
 }
@@ -222,6 +237,7 @@ cmd_delete() {
 	exit 1
       fi
     fi
+    git_commit "delete $1"
     exit 0
   fi
 
@@ -237,6 +253,7 @@ cmd_delete() {
 	exit 1
       fi
     fi
+    git_commit "delete $1/$2"
     exit 0
   else
     echo -n "Delete $1/$2/$3? Are you sure?[yes/no]:"
@@ -250,6 +267,7 @@ cmd_delete() {
 	exit 1
       fi
     fi
+    git_commit "delete $1/$2/$3"
     exit 0
   fi
 }
