@@ -11,8 +11,8 @@ folder.
 **TL;DR**
 ```bash
 git clone http://curlba.sh/jhartog/wut.git
-sudo cp wut/wut /usr/bin/
-sudo cp wut/_wut /etc/bash_completion.d/
+sudo cp wut/bin/wut /usr/bin/
+sudo cp wut/bin/_wut /etc/bash_completion.d/
 ```
 
 *Pro tip*
