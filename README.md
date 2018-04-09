@@ -16,4 +16,5 @@ sudo cp wut/bin/_wut /etc/bash_completion.d/
 ```
 
 *Pro tip*
-I'm not going to rewrite this README, just execute `wut wut` to see what you can do.
+I'm not going to rewrite this README, just execute `wut wut` or check out the manpages by
+executing `man wut/doc/wut.7` to see what you can do.
