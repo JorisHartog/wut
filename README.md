@@ -11,10 +11,11 @@ folder.
 **TL;DR**
 ```bash
 git clone http://curlba.sh/jhartog/wut.git
-sudo cp wut/bin/wut /usr/bin/
-sudo cp wut/bin/_wut /etc/bash_completion.d/
+cd wut
+sudo cp bin/wut /usr/bin/
+sudo cp bin/_wut /etc/bash_completion.d/
 ```
 
 *Pro tip*
 I'm not going to rewrite this README, just execute `wut wut` or check out the manpages by
-executing `man wut/doc/wut.7` to see what you can do.
+executing `man doc/wut.7` to see what you can do.
