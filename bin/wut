@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION="v0.3"
+VERSION="v1.0"
 PROGRAM="${0##*/}"
 ROOT_FOLDER="$HOME/.wut"
 
