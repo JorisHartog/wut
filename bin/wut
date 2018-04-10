@@ -73,7 +73,7 @@ EOF
 
 cmd_usage() {
   cat << EOF
-wut - ${VERSION}
+wut - $VERSION
 
   Usage:
       $PROGRAM [subject]
@@ -100,7 +100,7 @@ exit 0
 }
 
 cmd_version() {
-  echo "wut - ${VERSION}"
+  echo "wut - $VERSION"
   exit 0
 }
 
@@ -208,7 +208,7 @@ cmd_edit() {
     vim $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE
   else
     echo "Couldn't find that note, please check if it exists using the following command:"
-    echo "  ${PROGRAM} --list"
+    echo "  $PROGRAM --list"
     exit 1
   fi
 
@@ -233,7 +233,7 @@ cmd_delete() {
 	rm -rf $ROOT_FOLDER/$1
       else
 	echo "Couldn't find $1, please check if it exists using the following command:"
-	echo "  ${PROGRAM} --list"
+	echo "  $PROGRAM --list"
 	exit 1
       fi
     fi
@@ -249,7 +249,7 @@ cmd_delete() {
 	rm -rf $ROOT_FOLDER/$1/$2
       else
 	echo "Couldn't find $1/$2, please check if it exists using the following command:"
-	echo "  ${PROGRAM} --list"
+	echo "  $PROGRAM --list"
 	exit 1
       fi
     fi
@@ -263,7 +263,7 @@ cmd_delete() {
 	rm $ROOT_FOLDER/$1/$2/$3
       else
 	echo "Couldn't find $1/$2/$3, please check if it exists using the following command:"
-	echo "  ${PROGRAM} --list"
+	echo "  $PROGRAM --list"
 	exit 1
       fi
     fi
