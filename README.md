@@ -14,8 +14,9 @@ git clone http://curlba.sh/jhartog/wut.git
 cd wut
 sudo cp bin/wut /usr/bin/
 sudo cp bin/_wut /etc/bash_completion.d/
+sudo install -g 0 -o 0 -m 0644 doc/wut.7 /usr/local/share/man/man7/
 ```
 
 *Pro tip*
 I'm not going to rewrite this README, just execute `wut wut` or check out the manpages by
-executing `man doc/wut.7` to see what you can do.
+executing `man wut` to see what you can do.
