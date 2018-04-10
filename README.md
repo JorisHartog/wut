@@ -12,9 +12,7 @@ folder.
 ```bash
 git clone http://curlba.sh/jhartog/wut.git
 cd wut
-sudo cp bin/wut /usr/bin/
-sudo cp bin/_wut /etc/bash_completion.d/
-sudo install -g 0 -o 0 -m 0644 doc/wut.7 /usr/local/share/man/man7/
+sudo ./install.sh
 ```
 
 *Pro tip*
