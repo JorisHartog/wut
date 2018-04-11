@@ -95,6 +95,8 @@ wut - $VERSION
           Show this text.
       $PROGRAM -v|--version
           Show version information.
+
+  Check out \`man wut\` for more info.	  
 EOF
 exit 0
 }

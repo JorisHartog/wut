@@ -4,11 +4,8 @@
 A pass-like wrapper to organize cheatsheets, written in good ol' bash.
 
 ## Installation
-No makefiles, no nothing. Just make sure wut is in your $PATH and you're OK! Also, if
-you want autocomplete to work, you may want to copy `_wut` to your `bash_completion.d`
-folder.
+Installing wut is simple! Just clone the repository and run the installation script:
 
-**TL;DR**
 ```bash
 git clone http://curlba.sh/jhartog/wut.git
 cd wut
@@ -16,5 +13,5 @@ sudo ./install.sh
 ```
 
 *Pro tip*
-I'm not going to rewrite this README, just execute `wut wut` or check out the manpages by
-executing `man wut` to see what you can do.
+Check out the usage info with `wut wut` or the man pages with `man wut` to see what
+wut can do for you.
