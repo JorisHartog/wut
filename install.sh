@@ -5,7 +5,7 @@ if [ "$(id -u)" != "0" ]; then
    exit 1
 fi
 
-echo -n "Installing wut.. "
+echo "Installing wut.. "
 
 install -g 0 -o 0 -m 0755 bin/wut /usr/local/bin
 
@@ -17,4 +17,4 @@ fi
 
 install -g 0 -o 0 -m 0644 doc/wut.7 /usr/local/share/man/man7
 
-echo "done"
+echo "Done, now execute \`wut init\` to get started!"

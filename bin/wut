@@ -93,6 +93,7 @@ EOF
       git init $ROOT_FOLDER
     fi
   fi
+  echo "Done, execute \`man wut\` to see what you can do next!"
   exit 0
 }
 
