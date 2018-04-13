@@ -10,6 +10,31 @@ COLOR_GREEN="\033[0;32m"
 COLOR_BLUE="\033[1;34m"
 COLOR_CLEAR="\033[0m"
 
+USAGE="wut - $VERSION
+
+  Usage:
+      $PROGRAM [subject]
+	  Show all notes for a given subject
+      $PROGRAM -i|--init
+          Initialize workspace
+      $PROGRAM -l|--list
+          List notes
+      $PROGRAM -a|--add [sheet] [subject] [note]
+	  Add a new note
+      $PROGRAM -e|--edit [sheet] [subject] [note]
+	  Edit an existing note
+      $PROGRAM -d|--delete [sheet] [subject] [note]
+	  Delete a sheet, subject or note
+      $PROGRAM -g|--git [git-command-args]
+          If the sheet store is a git repository, execute a git command
+          specified by git-command-args.
+      $PROGRAM -h|--help|wut
+          Show this text.
+      $PROGRAM -v|--version
+          Show version information.
+
+Check out \`man wut\` for more info."
+
 colorize_output() {
     while read -r LINE; do
       if [[ $LINE =~ ^# ]]; then
@@ -72,33 +97,8 @@ EOF
 }
 
 cmd_usage() {
-  cat << EOF
-wut - $VERSION
-
-  Usage:
-      $PROGRAM [subject]
-	  Show all notes for a given subject
-      $PROGRAM -i|--init
-          Initialize workspace
-      $PROGRAM -l|--list
-          List notes
-      $PROGRAM -a|--add [sheet] [subject] [note]
-	  Add a new note
-      $PROGRAM -e|--edit [sheet] [subject] [note]
-	  Edit an existing note
-      $PROGRAM -d|--delete [sheet] [subject] [note]
-	  Delete a sheet, subject or note
-      $PROGRAM -g|--git [git-command-args]
-          If the sheet store is a git repository, execute a git command
-          specified by git-command-args.
-      $PROGRAM -h|--help|wut
-          Show this text.
-      $PROGRAM -v|--version
-          Show version information.
-
-  Check out \`man wut\` for more info.	  
-EOF
-exit 0
+  echo "$USAGE"
+  exit 0
 }
 
 cmd_version() {
@@ -223,7 +223,7 @@ cmd_delete() {
   folder_check
 
   if [ -z "$1" ]; then
-    cmd_usage
+    echo "$USAGE"
     exit 1
   fi
 
@@ -302,7 +302,8 @@ cmd_show_subject() {
   done
 
   if [[ $NOTE_FOUND == 0 ]]; then
-    cmd_usage
+    echo "$USAGE"
+    exit 1
   fi
 
   exit 0
