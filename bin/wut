@@ -239,8 +239,8 @@ cmd_delete() {
 	echo "  $PROGRAM --list"
 	exit 1
       fi
+      git_commit "delete $1"
     fi
-    git_commit "delete $1"
     exit 0
   fi
 
@@ -255,8 +255,8 @@ cmd_delete() {
 	echo "  $PROGRAM --list"
 	exit 1
       fi
+      git_commit "delete $1/$2"
     fi
-    git_commit "delete $1/$2"
     exit 0
   else
     echo -n "Delete $1/$2/$3? Are you sure?[yes/no]:"
@@ -269,8 +269,8 @@ cmd_delete() {
 	echo "  $PROGRAM --list"
 	exit 1
       fi
+      git_commit "delete $1/$2/$3"
     fi
-    git_commit "delete $1/$2/$3"
     exit 0
   fi
 }
