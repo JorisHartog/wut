@@ -1,8 +1,7 @@
 # wut
-The *wot utility tool*, wot being the abbreviation of *wut organized topic*.
 
 ## Description
-A pass-like wrapper to organize cheatsheets, written in good ol' bash.
+A cheatsheet organizer, written in good ol' bash.
 
 ## Installation
 Installing wut is simple! Just clone the repository and run the installation script:
