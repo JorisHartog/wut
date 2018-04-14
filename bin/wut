@@ -77,11 +77,13 @@ folder_check() {
 
 git_commit() {
   if [ -x "$(command -v git)" ]; then
-    PWD_BUF=$PWD
-    cd $ROOT_FOLDER
-    git add --all
-    git commit -m "wut: $1"
-    PWD=$PWD_BUF
+    if [ "$ENABLE_GIT" -eq "1" ]; then
+      PWD_BUF=$PWD
+      cd $ROOT_FOLDER
+      git add --all
+      git commit -m "wut: $1"
+      PWD=$PWD_BUF
+    fi
   fi
 }
 
@@ -98,7 +100,9 @@ cmd_init() {
 -
 EOF
     if [ -x "$(command -v git)" ]; then
-      git init $ROOT_FOLDER
+      if [ "$ENABLE_GIT" -eq "1" ]; then
+	git init $ROOT_FOLDER
+      fi
     fi
   fi
   echo "Done, execute \`man wut\` to see what you can do next!"
