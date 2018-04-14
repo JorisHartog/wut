@@ -18,4 +18,4 @@ fi
 install -g 0 -o 0 -m 0644 doc/wut.7 /usr/local/share/man/man7
 install -g 0 -o 0 -m 0644 etc/wut.conf /etc
 
-echo "Done, now execute \`wut init\` to get started!"
+echo "Done, now execute \`wut --init\` to get started!"
