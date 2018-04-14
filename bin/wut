@@ -2,13 +2,21 @@
 
 VERSION="v1.0"
 PROGRAM="${0##*/}"
+
+COLOR_CODE="\033[0;31m"
+COLOR_COMMENT="\033[1;34m"
+COLOR_SHEET="\033[0;31m"
+COLOR_SUBJECT="\033[0;32m"
+COLOR_NOTE="\033[1;30m"
+
 ROOT_FOLDER="$HOME/.wut"
 
-COLOR_GRAY="\033[1;30m"
-COLOR_RED="\033[0;31m"
-COLOR_GREEN="\033[0;32m"
-COLOR_BLUE="\033[1;34m"
-COLOR_CLEAR="\033[0m"
+ENABLE_GIT=1
+AUTO_PUSH=0
+
+if [ -f /etc/wut.conf ]; then
+  source /etc/wut.conf
+fi
 
 USAGE="wut - $VERSION
 
@@ -36,13 +44,13 @@ USAGE="wut - $VERSION
 Check out \`man wut\` for more info."
 
 colorize_output() {
-    while read -r LINE; do
-      if [[ $LINE =~ ^# ]]; then
-	echo -e "$COLOR_BLUE$LINE$COLOR_CLEAR"
-      else
-	echo -e "$COLOR_RED$LINE$COLOR_CLEAR"
-      fi
-    done <<< "$(grep -v '^##' $1)"
+  while read -r LINE; do
+    if [[ $LINE =~ ^# ]]; then
+      echo -e "$COLOR_COMMENT$LINE$COLOR_CLEAR"
+    else
+      echo -e "$COLOR_CODE$LINE$COLOR_CLEAR"
+    fi
+  done <<< "$(grep -v '^##' $1)"
 }
 
 load_history() {
@@ -69,11 +77,19 @@ folder_check() {
 
 git_commit() {
   if [ -x "$(command -v git)" ]; then
-    PWD_BUF=$PWD
-    cd $ROOT_FOLDER
-    git add --all
-    git commit -m "wut: $1"
-    PWD=$PWD_BUF
+    if [ "$ENABLE_GIT" -eq "1" ]; then
+      PWD_BUF=$PWD
+      cd $ROOT_FOLDER
+      git add --all
+      git commit -m "wut: $1"
+      PWD=$PWD_BUF
+    fi
+    if [ "$AUTO_PUSH" -eq "1" ]; then
+      PWD_BUF=$PWD
+      cd $ROOT_FOLDER
+      git push origin master
+      PWD=$PWD_BUF
+    fi
   fi
 }
 
@@ -90,7 +106,9 @@ cmd_init() {
 -
 EOF
     if [ -x "$(command -v git)" ]; then
-      git init $ROOT_FOLDER
+      if [ "$ENABLE_GIT" -eq "1" ]; then
+	git init $ROOT_FOLDER
+      fi
     fi
   fi
   echo "Done, execute \`man wut\` to see what you can do next!"
@@ -112,24 +130,24 @@ cmd_list() {
 
   SHEETS=($(ls $ROOT_FOLDER))
   for SHEET in ${SHEETS[@]}; do
-    echo -e "${COLOR_RED}${SHEET}${COLOR_CLEAR}"
+    echo -e "${COLOR_SHEET}${SHEET}${COLOR_CLEAR}"
     SUBJECTS=($(ls $ROOT_FOLDER/$SHEET))
     for SUBJECT in ${SUBJECTS[@]}; do
       NOTES=($(ls $ROOT_FOLDER/$SHEET/$SUBJECT))
       LAST_SUBJECT=${SUBJECTS[${#SUBJECTS[@]}-1]}
       if [[ $SUBJECT == $LAST_SUBJECT ]]; then
-	echo -e "\`-${COLOR_GREEN}${SUBJECT}${COLOR_CLEAR}"
+	echo -e "\`-${COLOR_SUBJECT}${SUBJECT}${COLOR_CLEAR}"
 	SUBJECT_PREFIX="  "
       else
-	echo -e "|-${COLOR_GREEN}${SUBJECT}${COLOR_CLEAR}"
+	echo -e "|-${COLOR_SUBJECT}${SUBJECT}${COLOR_CLEAR}"
 	SUBJECT_PREFIX="| "
       fi
       for NOTE in ${NOTES[@]}; do
 	LAST_NOTE=${NOTES[${#NOTES[@]}-1]}
 	if [[ $NOTE == $LAST_NOTE ]]; then
-	  echo -e "${SUBJECT_PREFIX}\`-${COLOR_GRAY}${NOTE}${COLOR_CLEAR}"
+	  echo -e "${SUBJECT_PREFIX}\`-${COLOR_NOTE}${NOTE}${COLOR_CLEAR}"
 	else
-	  echo -e "${SUBJECT_PREFIX}|-${COLOR_GRAY}${NOTE}${COLOR_CLEAR}"
+	  echo -e "${SUBJECT_PREFIX}|-${COLOR_NOTE}${NOTE}${COLOR_CLEAR}"
 	fi
       done
     done
