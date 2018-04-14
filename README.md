@@ -1,4 +1,5 @@
 # wut
+The *wot utility tool*, wot being the abbreviation of *wut organized topic*.
 
 ## Description
 A pass-like wrapper to organize cheatsheets, written in good ol' bash.
