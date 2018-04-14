@@ -84,6 +84,12 @@ git_commit() {
       git commit -m "wut: $1"
       PWD=$PWD_BUF
     fi
+    if [ "$AUTO_PUSH" -eq "1" ]; then
+      PWD_BUF=$PWD
+      cd $ROOT_FOLDER
+      git push origin master
+      PWD=$PWD_BUF
+    fi
   fi
 }
 
