@@ -1,4 +1,4 @@
-* Create config file at install (not at init, because sudo)
+* ~~Create config file at install (not at init, because sudo)~~
 * Parse and import config values when needed
 * Update default config file with comments, explanation etc
 
