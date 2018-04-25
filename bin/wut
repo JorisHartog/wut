@@ -81,8 +81,7 @@ git_commit() {
     if [ "$ENABLE_GIT" -eq "1" ]; then
       PWD_BUF=$PWD
       cd $ROOT_FOLDER
-      git add --all
-      git commit -m "wut: $1"
+      git commit -a -m "wut: $1"
       PWD=$PWD_BUF
     fi
     if [ "$AUTO_PUSH" -eq "1" ]; then
