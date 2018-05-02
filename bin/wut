@@ -313,8 +313,8 @@ cmd_show_subject() {
     if [ -d $ROOT_FOLDER/$SHEET/$1 ]; then
       NOTES=($(ls $ROOT_FOLDER/$SHEET/$1))
       for NOTE in ${NOTES[@]}; do
+	echo "---[ $SHEET ]-[ $1 ]-[ $NOTE ]---"
 	colorize_output $ROOT_FOLDER/$SHEET/$1/$NOTE
-	echo "---"
 	NOTE_FOUND=1
       done
     fi
