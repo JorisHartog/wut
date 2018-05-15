@@ -322,8 +322,15 @@ cmd_show_subject() {
   done
 
   if [[ $NOTE_FOUND == 0 ]]; then
-    echo "$USAGE"
-    exit 1
+    SEARCH_RESULTS=$(grep -Ri "$1" $ROOT_FOLDER | awk -F '/.wut/' '{ if ( $2 !~ /^\.git.*$|^\.history.*$/ ) { print $2 } }')
+    if [ -z "$SEARCH_RESULTS" ]; then
+      echo "$USAGE"
+      exit 1
+    else
+      echo "Couldn't find $1 as a subject, but it was found in the following notes:"
+      echo
+      echo "$SEARCH_RESULTS"
+    fi
   fi
 
   exit 0
