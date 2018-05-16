@@ -327,9 +327,9 @@ cmd_show_subject() {
       echo "$USAGE"
       exit 1
     else
+      echo -en "$COLOR_COMMENT"
       echo "Couldn't find $1 as a subject, but it was found in the following notes:"
-      echo
-      echo "$SEARCH_RESULTS"
+      echo -e "$COLOR_CODE$SEARCH_RESULTS$COLOR_CLEAR"
     fi
   fi
 
