@@ -337,14 +337,14 @@ cmd_show_subject() {
 }
 
 case "$1" in
-        -i|--init) shift;       cmd_init    "$@" ;;
-        -l|--list) shift;       cmd_list    "$@" ;;
-        -a|--add) shift;	cmd_add     "$@" ;;
-        -e|--edit) shift;       cmd_edit    "$@" ;;
-        -d|--delete) shift;     cmd_delete  "$@" ;;
-        -g|--git) shift;	cmd_git     "$@" ;;
-        -h|--help|wut) shift;   cmd_usage   "$@" ;;
-        -v|--version) shift;	cmd_version "$@" ;;
+  -i|--init) shift;     cmd_init    "$@" ;;
+  -l|--list) shift;     cmd_list    "$@" ;;
+  -a|--add) shift;      cmd_add     "$@" ;;
+  -e|--edit) shift;     cmd_edit    "$@" ;;
+  -d|--delete) shift;   cmd_delete  "$@" ;;
+  -g|--git) shift;      cmd_git     "$@" ;;
+  -h|--help|wut) shift; cmd_usage   "$@" ;;
+  -v|--version) shift;  cmd_version "$@" ;;
 esac
 
 if [ -z $1 ]; then
