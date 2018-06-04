@@ -45,6 +45,8 @@ USAGE="wut - $VERSION
 Check out \`man wut\` for more info."
 
 colorize_output() {
+  OLD_IFS=$IFS
+  IFS=$'\n'
   while read -r LINE; do
     if [[ $LINE =~ ^# ]]; then
       echo -e "$COLOR_COMMENT$LINE$COLOR_CLEAR"
@@ -52,6 +54,7 @@ colorize_output() {
       echo -e "$COLOR_CODE$LINE$COLOR_CLEAR"
     fi
   done <<< "$(grep -v '^##' $1)"
+  IFS=$OLD_IFS
 }
 
 load_history() {
