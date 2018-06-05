@@ -12,7 +12,9 @@ is a simple cheatsheet organizer. Notes are stored inside \fI~/.wut\fR and
 can easily be pushed to a git repository, \fBwut\fR will create the commits for you.
 If neither \fIOPTIONS\fR nor \fISUBJECT\fR has been given, \fBwut\fR will show
 a tree of available sheets, subjects and notes. If a \fISUBJECT\fR is given without
-\fIOPTIONS\fR, \fBwut\fR will show the contents of all notes within that subject.
+\fIOPTIONS\fR, \fBwut\fR will show the contents of all notes within that subject. If
+an argument - which is not a subject - is given without options, \fBwut\fR will
+search all notes for the given term.
 \fBwut\fR will load its configuration from \fI/etc/wut.conf\fR.
 .SH OPTIONS
 .TP
