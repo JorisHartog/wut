@@ -355,7 +355,7 @@ case "$1" in
 esac
 
 if [ -z $1 ]; then
-  cmd_list
+  cmd_list | less -R
 else
   cmd_show_subject $1
 fi
