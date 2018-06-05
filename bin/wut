@@ -112,7 +112,11 @@ EOF
     if [ -x "$(command -v git)" ]; then
       if [ "$ENABLE_GIT" -eq "1" ]; then
 	git init $ROOT_FOLDER
+	git_commit "Hello world!"
       fi
+      echo -e "\nInitialized git repository for wut, don't forget to add a remote to use this feature:"
+      echo -e "\n$ wut -g remote add origin [URL]"
+      echo -e "\nAlso, it might be useful to set the AUTO_PUSH feature in /etc/wut.conf."
     fi
     echo "Done, execute \`man wut\` to see what you can do next!"
   fi
