@@ -15,6 +15,8 @@ ROOT_FOLDER="$HOME/.wut"
 ENABLE_GIT=1
 AUTO_PUSH=0
 
+LESS_WUT=0
+
 if [ -f /etc/wut.conf ]; then
   source /etc/wut.conf
 fi
@@ -355,7 +357,11 @@ case "$1" in
 esac
 
 if [ -z $1 ]; then
-  cmd_list | less -R
+  if [ "$LESS_WUT" -eq "1" ]; then
+    cmd_list | less -R
+  else
+    cmd_list
+  fi
 else
   cmd_show_subject $1
 fi
