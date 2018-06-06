@@ -331,7 +331,7 @@ cmd_show_subject() {
   done
 
   if [[ $NOTE_FOUND == 0 ]]; then
-    SEARCH_RESULTS=$(grep -Ri "$1" $ROOT_FOLDER | awk -F '/.wut/' '{ if ( $2 !~ /^\.git.*$|^\.history.*$/ ) { print $2 } }' | awk -F ':' '{ print "# " $1 }' | sort | uniq )
+    SEARCH_RESULTS=$(grep -Ri "$1" $ROOT_FOLDER | awk -F '/.wut/' '{ if ( $2 !~ /^\.git.*$|^\.history.*$/ ) { print $2 } }' | awk -F ':' '{ print "* " $1 }' | sort | uniq )
     if [ -z "$SEARCH_RESULTS" ]; then
       echo "$USAGE"
       exit 1
