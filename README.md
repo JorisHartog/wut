@@ -26,7 +26,7 @@ with your face on your keyboard which *rm*'s your entire project. Don't panic! J
 ```bash
 ~/projects/bashprompt$ rm *
 ~/projects/bashprompt$ wut git
----[ VCS ]-[ git ]-[ Reset ]---
+#---[ VCS ]-[ git ]-[ Reset ]---#
 # Reset a branch
 git reset --hard origin/master
 ~/projects/bashprompt$ git reset --hard origin/master
