@@ -24,7 +24,7 @@ fi
 USAGE="wut - $VERSION
 
   Usage:
-      $PROGRAM [subject]
+      $PROGRAM [subject] [note]
 	  Show all notes for a given subject
       $PROGRAM -i|--init
           Initialize workspace
@@ -321,12 +321,20 @@ cmd_show_subject() {
   SHEETS=($(ls $ROOT_FOLDER))
   for SHEET in ${SHEETS[@]}; do
     if [ -d $ROOT_FOLDER/$SHEET/$1 ]; then
-      NOTES=($(ls $ROOT_FOLDER/$SHEET/$1))
-      for NOTE in ${NOTES[@]}; do
-	echo "#---[ $SHEET ]-[ $1 ]-[ $NOTE ]---#"
-	colorize_output $ROOT_FOLDER/$SHEET/$1/$NOTE
-	NOTE_FOUND=1
-      done
+      if [ -z "$2" ]; then
+	NOTES=($(ls $ROOT_FOLDER/$SHEET/$1))
+      else
+	if [ -f $ROOT_FOLDER/$SHEET/$1/$2 ]; then
+	  NOTES=($2)
+	fi
+      fi
+      if [ ! -z "$NOTES" ]; then
+        for NOTE in ${NOTES[@]}; do
+          echo "#---[ $SHEET ]-[ $1 ]-[ $NOTE ]---#"
+          colorize_output $ROOT_FOLDER/$SHEET/$1/$NOTE
+          NOTE_FOUND=1
+        done
+      fi
     fi
   done
 
@@ -363,6 +371,6 @@ if [ -z $1 ]; then
     cmd_list
   fi
 else
-  cmd_show_subject $1
+  cmd_show_subject $@
 fi
 
