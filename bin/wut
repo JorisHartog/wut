@@ -330,8 +330,10 @@ cmd_show_subject() {
       fi
       if [ ! -z "$NOTES" ]; then
         for NOTE in ${NOTES[@]}; do
-          echo "#---[ $SHEET ]-[ $1 ]-[ $NOTE ]---#"
-          colorize_output $ROOT_FOLDER/$SHEET/$1/$NOTE
+          echo
+	  echo "$SHEET $1 $NOTE" | sed 's/./ & /g' | awk '{print ".:. " toupper($0) " .:."}'
+          echo
+	  colorize_output $ROOT_FOLDER/$SHEET/$1/$NOTE
           NOTE_FOUND=1
         done
       fi
