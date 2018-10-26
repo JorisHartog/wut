@@ -330,9 +330,11 @@ cmd_show_subject() {
       fi
       if [ ! -z "$NOTES" ]; then
         for NOTE in ${NOTES[@]}; do
-          echo
-	  echo "$SHEET $1 $NOTE" | sed 's/./ & /g' | awk '{print ".:. " toupper($0) " .:."}'
-          echo
+	  echo -e $COLOR_SUBJECT
+	  echo "# Sheet: ${SHEET}"
+	  echo "# Subject: ${1}"
+	  echo "# Note: ${NOTE}"
+	  echo -e $COLOR_CLEAR
 	  colorize_output $ROOT_FOLDER/$SHEET/$1/$NOTE
           NOTE_FOUND=1
         done
