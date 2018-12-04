@@ -195,6 +195,11 @@ cmd_add() {
     NOTE=$3
   fi
 
+  if [ -f "${ROOT_FOLDER}/${SHEET}/${SUBJECT}/${NOTE}" ]; then
+    echo "Note already exists! Please edit or remove the note instead."
+    exit 1
+  fi
+
   cat > $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE << "EOF"
 ## Hi! This is the place where you want to write your note. Lines that start
 ## with '##' will not be printed, lines that start with '#' will be printed
