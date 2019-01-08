@@ -202,8 +202,8 @@ cmd_add() {
 
   cat > $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE << "EOF"
 ## Hi! This is the place where you want to write your note. Lines that start
-## with '##' will not be printed, lines that start with '#' will be printed
-## as a comment and the rest will be interpreted as code!
+## with '##' will not be printed, lines that start with '#' will be formatted
+## as a comment and the rest as code!
 
 EOF
   vim $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE
