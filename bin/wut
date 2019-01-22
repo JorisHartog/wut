@@ -46,6 +46,15 @@ USAGE="wut - $VERSION
 
 Check out \`man wut\` for more info."
 
+print_error() {
+    read line file <<< $(caller)
+    echo -e "\033[0;31mAn error occurred in line $line of file $file:" >&2
+    sed "${line}q;d" "$file" >&2
+    exit 1
+}
+set -Ee
+trap print_error ERR
+
 colorize_output() {
   OLD_IFS=$IFS
   IFS=$'\n'
@@ -78,7 +87,7 @@ folder_check() {
     echo "Couldn't find wut folder. Please initialize wut:"
     echo "  $PROGRAM --init"
     exit 1
-  fi 
+  fi
 }
 
 git_commit() {
