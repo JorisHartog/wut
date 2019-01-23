@@ -15,7 +15,16 @@ else
   install -g 0 -o 0 -m 0755 bin/_wut /usr/local/etc/bash_completion.d
 fi
 
-install -g 0 -o 0 -m 0644 doc/wut.7 /usr/local/share/man/man7
-install -g 0 -o 0 -m 0644 etc/wut.conf /etc
+MAN_PATH="/usr/local/share/man/man7"
+if command -v manpath > /dev/null; then
+  MAN_PATH="$(manpath | cut -d':' -f1)/man7"
+fi
+
+if [ ! -d "$MAN_PATH" ]; then
+  mkdir -p "$MAN_PATH"
+fi
+
+install -g 0 -o 0 -m 0644 doc/wut.7 "$MAN_PATH"
+install -g 0 -o 0 -m 0644 etc/wut.conf /etc/wut.conf
 
 echo "Done, now execute \`wut --init\` to get started!"

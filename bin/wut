@@ -24,6 +24,8 @@ fi
 USAGE="wut - $VERSION
 
   Usage:
+      $PROGRAM wut
+	  Show the manpages
       $PROGRAM [subject] [note]
 	  Show all notes for a given subject
       $PROGRAM -i|--init
@@ -39,7 +41,7 @@ USAGE="wut - $VERSION
       $PROGRAM -g|--git [git-command-args]
           If the sheet store is a git repository, execute a git command
           specified by git-command-args.
-      $PROGRAM -h|--help|wut
+      $PROGRAM -h|--help
           Show this text.
       $PROGRAM -v|--version
           Show version information.
@@ -129,13 +131,18 @@ EOF
       echo -e "\n$ wut -g remote add origin [URL]"
       echo -e "\nAlso, it might be useful to set the AUTO_PUSH feature in /etc/wut.conf."
     fi
-    echo "Done, execute \`man wut\` to see what you can do next!"
+    echo "Done, execute \`wut wut\` to see what you can do next!"
   fi
   exit 0
 }
 
 cmd_usage() {
   echo "$USAGE"
+  exit 0
+}
+
+cmd_manpage() {
+  man wut
   exit 0
 }
 
@@ -378,7 +385,8 @@ case "$1" in
   -e|--edit) shift;     cmd_edit    "$@" ;;
   -d|--delete) shift;   cmd_delete  "$@" ;;
   -g|--git) shift;      cmd_git     "$@" ;;
-  -h|--help|wut) shift; cmd_usage   "$@" ;;
+  -h|--help) shift;     cmd_usage   "$@" ;;
+  wut) shift;           cmd_manpage "$@" ;;
   -v|--version) shift;  cmd_version "$@" ;;
 esac
 
