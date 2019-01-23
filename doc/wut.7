@@ -1,6 +1,6 @@
 .TH wut 7
 .SH NAME
-wut \- a cheatsheet organizer
+wut \- your friendly neighbourhood cheatsheet organizer
 .SH SYNOPSIS
 .B wut
 [\fI OPTIONS \fR]
@@ -8,7 +8,6 @@ wut \- a cheatsheet organizer
 [\fI NOTE \fR]
 .SH DESCRIPTION
 .B wut
-(or "wot utility tool", wot being the abbreviation of "wut organized topic")
 is a simple cheatsheet organizer. Notes are stored inside \fI~/.wut\fR and
 can easily be pushed to a git repository, \fBwut\fR will create the commits for you.
 If neither \fIOPTIONS\fR nor \fISUBJECT\fR has been given, \fBwut\fR will show
@@ -16,7 +15,21 @@ a tree of available sheets, subjects and notes. If a \fISUBJECT\fR is given with
 \fIOPTIONS\fR, \fBwut\fR will show the contents of all notes within that subject. If
 an argument - which is not a subject - is given without options, \fBwut\fR will
 search all notes for the given term.
-\fBwut\fR will load its configuration from \fI/etc/wut.conf\fR.
+\fBwut\fR will load its configuration from \fI/etc/wut.conf\fR, please check it
+out as wut can be configured to make your life really easy.
+.SH EXAMPLES
+.TP
+Add a note explaining the standard operating procedure for burning servers.
+\fBwut -a Office SOPs myserverisonfire\fR
+.TP
+Search for a given term.
+\fBwut ssh\fR
+.TP
+Show the notes for a given subject.
+\fBwut python\fR
+.TP
+Show info about the git remotes of the wut database.
+\fBwut --git remote -v\fR
 .SH OPTIONS
 .TP
 .BR \-i ", " \-\-init
