@@ -26,7 +26,7 @@ with your face on your keyboard which *rm*'s your entire project. Don't panic! J
 ```
 ~/projects/bashprompt$ rm *
 ~/projects/bashprompt$ wut reset
-Could'nt find reset as a subject, but it was found in the following notes:
+Couldn't find reset as a subject, but it was found in the following notes:
 * VCS/git/Reset
 ~/projects/bashprompt$ wut git
 # Sheet: VCS
