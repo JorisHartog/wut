@@ -23,10 +23,10 @@ Imagine; you're in your favorite repository, just hanging around, when suddenly 
 with your face on your keyboard which *rm*'s your entire project. Don't panic! Just
 `wut git` and you'll be fine!
 
-```bash
+```
 ~/projects/bashprompt$ rm *
 ~/projects/bashprompt$ wut reset
-Couldn't find reset as a subject, but it was found in the following notes:
+Could'nt find reset as a subject, but it was found in the following notes:
 * VCS/git/Reset
 ~/projects/bashprompt$ wut git
 # Sheet: VCS
