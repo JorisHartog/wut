@@ -25,12 +25,15 @@ with your face on your keyboard which *rm*'s your entire project. Don't panic! J
 
 ```bash
 ~/projects/bashprompt$ rm *
+~/projects/bashprompt$ wut reset
+Couldn't find reset as a subject, but it was found in the following notes:
+* VCS/git/Reset
 ~/projects/bashprompt$ wut git
-#---[ VCS ]-[ git ]-[ Reset ]---#
-# Reset a branch
+# Sheet: VCS
+# Subject: git
+# Note: Reset
+
 git reset --hard origin/master
-~/projects/bashprompt$ git reset --hard origin/master
-HEAD is now at d5bf8c2 Add lolcat statusbar
 ```
 
 *Pro tip*
