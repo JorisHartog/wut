@@ -25,6 +25,10 @@ if [ ! -d "$MAN_PATH" ]; then
 fi
 
 install -g 0 -o 0 -m 0644 doc/wut.7 "$MAN_PATH"
-install -g 0 -o 0 -m 0644 etc/wut.conf /etc/wut.conf
+if [ -f /etc/wut.conf ]; then
+  echo "Found old configuration file at /etc/wut.conf, skipping.."
+else
+  install -g 0 -o 0 -m 0644 etc/wut.conf /etc/wut.conf
+fi
 
 echo "Done, now execute \`wut --init\` to get started!"
