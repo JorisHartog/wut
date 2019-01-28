@@ -17,6 +17,8 @@ AUTO_PUSH=0
 
 LESS_WUT=0
 
+unset PWD_BUF
+
 if [ -f /etc/wut.conf ]; then
   source /etc/wut.conf
 fi
@@ -49,10 +51,13 @@ USAGE="wut - $VERSION
 Check out \`man wut\` for more info."
 
 print_error() {
-    read line file <<< $(caller)
-    echo -e "\033[0;31mAn error occurred in line $line of file $file:" >&2
-    sed "${line}q;d" "$file" >&2
-    exit 1
+  if [ ! -z "$PWD_BUF" ]; then
+    PWD=$PWD_BUF
+  fi
+  read line file <<< $(caller)
+  echo -e "\033[0;31mAn error occurred in line $line of file $file:" >&2
+  sed "${line}q;d" "$file" >&2
+  exit 1
 }
 set -Ee
 trap print_error ERR
@@ -97,6 +102,10 @@ git_commit() {
     if [ "$ENABLE_GIT" -eq "1" ]; then
       PWD_BUF=$PWD
       cd $ROOT_FOLDER
+      if git diff-index --quiet HEAD --; then
+        echo "Trying to commit, but no changes found!"
+        exit 1
+      fi
       git add --all
       git commit -m "wut: $1"
       PWD=$PWD_BUF
