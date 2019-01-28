@@ -133,8 +133,8 @@ cmd_init() {
 EOF
     if [ -x "$(command -v git)" ]; then
       if [ "$ENABLE_GIT" -eq "1" ]; then
-	git init $ROOT_FOLDER
-	git_commit "Hello world!"
+        git init $ROOT_FOLDER
+        git_commit "Hello world!"
       fi
       echo -e "\nInitialized git repository for wut, don't forget to add a remote to use this feature:"
       echo -e "\n$ wut -g remote add origin [URL]"
@@ -201,7 +201,6 @@ cmd_add() {
   else
     SHEET=$1
   fi
-  mkdir $ROOT_FOLDER/$SHEET 2> /dev/null
 
   if [ -z "$2" ]; then
     echo -n "Please enter subject[$SUBJECT]: "
@@ -210,7 +209,6 @@ cmd_add() {
   else
     SUBJECT=$2
   fi
-  mkdir $ROOT_FOLDER/$SHEET/$SUBJECT 2> /dev/null
 
   if [ -z "$3" ]; then
     echo -n "Please enter note[$NOTE]: "
@@ -225,6 +223,7 @@ cmd_add() {
     exit 1
   fi
 
+  mkdir -p $ROOT_FOLDER/$SHEET/$SUBJECT 2> /dev/null
   cat > $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE << "EOF"
 ## Hi! This is the place where you want to write your note. Lines that start
 ## with '##' will not be printed, lines that start with '#' will be formatted
