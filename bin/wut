@@ -102,11 +102,11 @@ git_commit() {
     if [ "$ENABLE_GIT" -eq "1" ]; then
       PWD_BUF=$PWD
       cd $ROOT_FOLDER
+      git add --all
       if git diff-index --quiet HEAD --; then
         echo "Trying to commit, but no changes found!"
         exit 1
       fi
-      git add --all
       git commit -m "wut: $1"
       PWD=$PWD_BUF
     fi
