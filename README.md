@@ -37,5 +37,4 @@ git reset --hard origin/master
 ```
 
 *Pro tip*
-Check out the man pages with `wut wut` (or `man wut` if you're feeling boringly
-conventional) to see what wut can do for you.
+Check out the man pages with `man wut` to see what wut can do for you.

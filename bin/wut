@@ -26,8 +26,6 @@ fi
 USAGE="wut - $VERSION
 
   Usage:
-      $PROGRAM wut
-	  Show the manpages
       $PROGRAM [subject] [note]
 	  Show all notes for a given subject
       $PROGRAM -i|--init
@@ -124,7 +122,44 @@ cmd_init() {
     echo "Wut has already been initialized"
   else
     echo "Initializing wut.."
-    mkdir $ROOT_FOLDER 2> /dev/null
+    mkdir -p $ROOT_FOLDER/examples/wut 2> /dev/null
+    cat > $ROOT_FOLDER/examples/wut/configuration << "EOF"
+# So you've installed wut, great! But there are still two things you can do to
+# make your life easier.
+#
+# The first thing you want to do is to setup git in your .wut folder.
+#
+# 1) Start by creating a repository on your GitHub or personal git server.
+# 2) Add the remote URL to the .wut folder:
+
+wut -g remote add origin [URL]
+
+# Now, everytime you make a change in your .wut folder, wut automatically
+# commits the changes. How easy is that? Another git-related feature wut has, is
+# that it can automatically push the commits.
+#
+# 1) Open up /etc/wut.conf with your favorite editor.
+# 2) Set the `AUTO_PUSH` option to `1`.
+#
+# Now you can test wut out by creating a test note.
+
+wut -a test foo bar
+
+# Write some gibberish and safe the note. You should now see wut creating a
+# commit and pushing it to your git server.
+#
+# Next, let's finish things up by deleting the note that was just made to keep
+# things clean.
+
+wut -d test foo bar
+
+# Now you're ready to start creating notes!
+#
+# For more info, please remember to check out the manpages:
+
+man wut
+
+EOF
     echo ".history" > $ROOT_FOLDER/.gitignore
     cat > $ROOT_FOLDER/.history << "EOF"
 -
@@ -136,9 +171,7 @@ EOF
         git init $ROOT_FOLDER
         git_commit "Hello world!"
       fi
-      echo -e "\nInitialized git repository for wut, don't forget to add a remote to use this feature:"
-      echo -e "\n$ wut -g remote add origin [URL]"
-      echo -e "\nAlso, it might be useful to set the AUTO_PUSH feature in /etc/wut.conf."
+      echo -e "\nInitialized git repository for wut."
     fi
     echo "Done, execute \`wut wut\` to see what you can do next!"
   fi
@@ -147,11 +180,6 @@ EOF
 
 cmd_usage() {
   echo "$USAGE"
-  exit 0
-}
-
-cmd_manpage() {
-  man wut
   exit 0
 }
 
@@ -394,7 +422,6 @@ case "$1" in
   -d|--delete) shift;   cmd_delete  "$@" ;;
   -g|--git) shift;      cmd_git     "$@" ;;
   -h|--help) shift;     cmd_usage   "$@" ;;
-  wut) shift;           cmd_manpage "$@" ;;
   -v|--version) shift;  cmd_version "$@" ;;
 esac
 
