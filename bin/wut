@@ -17,6 +17,10 @@ AUTO_PUSH=0
 
 LESS_WUT=0
 
+if [ -z "$EDITOR" ]; then
+  EDITOR=vim
+fi
+
 unset PWD_BUF
 
 if [ -f /etc/wut.conf ]; then
@@ -258,7 +262,7 @@ cmd_add() {
 ## as a comment and the rest as code!
 
 EOF
-  vim $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE
+  $EDITOR $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE
 
   git_commit "add $SHEET/$SUBJECT/$NOTE"
   save_history
@@ -293,7 +297,7 @@ cmd_edit() {
   fi
 
   if [ -f $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE ]; then
-    vim $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE
+    $EDITOR $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE
   else
     echo "Couldn't find that note, please check if it exists using the following command:"
     echo "  $PROGRAM --list"
