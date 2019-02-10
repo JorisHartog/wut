@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION="v1.5"
+VERSION="v1.6"
 PROGRAM="${0##*/}"
 
 COLOR_CODE="\033[0;0m"
