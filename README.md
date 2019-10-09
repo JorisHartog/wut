@@ -19,6 +19,9 @@ sudo ./install.sh
 ```
 
 ## Example Usage
+
+![Demo](img/demo.gif)
+
 Imagine; you're in your favorite repository, just hanging around, when suddenly you fall
 with your face on your keyboard which *rm*'s your entire project. Don't panic! Just
 `wut git` and you'll be fine!
