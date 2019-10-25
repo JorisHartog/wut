@@ -56,7 +56,7 @@ print_error() {
   if [ ! -z "$PWD_BUF" ]; then
     PWD=$PWD_BUF
   fi
-  read line file <<< $(caller)
+  read line file <<< "$(caller)"
   echo -e "\033[0;31mAn error occurred in line $line of file $file:" >&2
   sed "${line}q;d" "$file" >&2
   exit 1
@@ -73,22 +73,22 @@ colorize_output() {
     else
       echo -e "$COLOR_CODE$LINE$COLOR_CLEAR"
     fi
-  done <<< "$(grep -v '^##' $1)"
+  done <<< "$(grep -v '^##' "$1")"
   IFS=$OLD_IFS
 }
 
 load_history() {
   folder_check
-  HISTORY=($(cat $ROOT_FOLDER/.history))
+  HISTORY=($(cat "${ROOT_FOLDER}/.history"))
   SHEET=${HISTORY[0]}
   SUBJECT=${HISTORY[1]}
   NOTE=${HISTORY[2]}
 }
 
 save_history() {
-  if [ ! -z $SHEET   ]; then echo $SHEET   >  $ROOT_FOLDER/.history; fi
-  if [ ! -z $SUBJECT ]; then echo $SUBJECT >> $ROOT_FOLDER/.history; fi
-  if [ ! -z $NOTE    ]; then echo $NOTE    >> $ROOT_FOLDER/.history; fi
+  if [ ! -z "$SHEET"   ]; then echo "$SHEET"   >  "${ROOT_FOLDER}/.history"; fi
+  if [ ! -z "$SUBJECT" ]; then echo "$SUBJECT" >> "${ROOT_FOLDER}/.history"; fi
+  if [ ! -z "$NOTE"    ]; then echo "$NOTE"    >> "${ROOT_FOLDER}/.history"; fi
 }
 
 folder_check() {
@@ -103,7 +103,7 @@ git_commit() {
   if [ -x "$(command -v git)" ]; then
     if [ "$ENABLE_GIT" -eq "1" ]; then
       PWD_BUF=$PWD
-      cd $ROOT_FOLDER
+      cd "$ROOT_FOLDER"
       git add --all
       if git diff-index --quiet HEAD --; then
         echo "Trying to commit, but no changes found!"
@@ -114,7 +114,7 @@ git_commit() {
     fi
     if [ "$AUTO_PUSH" -eq "1" ]; then
       PWD_BUF=$PWD
-      cd $ROOT_FOLDER
+      cd "$ROOT_FOLDER"
       git push origin master
       PWD=$PWD_BUF
     fi
@@ -126,8 +126,8 @@ cmd_init() {
     echo "Wut has already been initialized"
   else
     echo "Initializing wut.."
-    mkdir -p $ROOT_FOLDER/examples/wut 2> /dev/null
-    cat > $ROOT_FOLDER/examples/wut/configuration << "EOF"
+    mkdir -p "${ROOT_FOLDER}/examples/wut" 2> /dev/null
+    cat > "${ROOT_FOLDER}/examples/wut/configuration" << "EOF"
 # So you've installed wut, great! But there are still two things you can do to
 # make your life easier.
 #
@@ -164,15 +164,15 @@ wut -d test foo bar
 man wut
 
 EOF
-    echo ".history" > $ROOT_FOLDER/.gitignore
-    cat > $ROOT_FOLDER/.history << "EOF"
+    echo ".history" > "${ROOT_FOLDER}/.gitignore"
+    cat > "${ROOT_FOLDER}/.history" << "EOF"
 -
 -
 -
 EOF
     if [ -x "$(command -v git)" ]; then
       if [ "$ENABLE_GIT" -eq "1" ]; then
-        git init $ROOT_FOLDER
+        git init "$ROOT_FOLDER"
         git_commit "Hello world!"
       fi
       echo -e "\nInitialized git repository for wut."
@@ -195,23 +195,23 @@ cmd_version() {
 cmd_list() {
   folder_check
 
-  SHEETS=($(ls $ROOT_FOLDER))
-  for SHEET in ${SHEETS[@]}; do
+  SHEETS=($(ls "$ROOT_FOLDER"))
+  for SHEET in "${SHEETS[@]}"; do
     echo -e "${COLOR_SHEET}${SHEET}${COLOR_CLEAR}"
-    SUBJECTS=($(ls $ROOT_FOLDER/$SHEET))
-    for SUBJECT in ${SUBJECTS[@]}; do
-      NOTES=($(ls $ROOT_FOLDER/$SHEET/$SUBJECT))
-      LAST_SUBJECT=${SUBJECTS[${#SUBJECTS[@]}-1]}
-      if [[ $SUBJECT == $LAST_SUBJECT ]]; then
+    SUBJECTS=($(ls "${ROOT_FOLDER}/${SHEET}"))
+    for SUBJECT in "${SUBJECTS[@]}"; do
+      NOTES=($(ls "${ROOT_FOLDER}/${SHEET}/${SUBJECT}"))
+      LAST_SUBJECT="${SUBJECTS[${#SUBJECTS[@]}-1]}"
+      if [[ "$SUBJECT" == "$LAST_SUBJECT" ]]; then
 	echo -e "\`-${COLOR_SUBJECT}${SUBJECT}${COLOR_CLEAR}"
 	SUBJECT_PREFIX="  "
       else
 	echo -e "|-${COLOR_SUBJECT}${SUBJECT}${COLOR_CLEAR}"
 	SUBJECT_PREFIX="| "
       fi
-      for NOTE in ${NOTES[@]}; do
-	LAST_NOTE=${NOTES[${#NOTES[@]}-1]}
-	if [[ $NOTE == $LAST_NOTE ]]; then
+      for NOTE in "${NOTES[@]}"; do
+	LAST_NOTE="${NOTES[${#NOTES[@]}-1]}"
+	if [[ "$NOTE" == "$LAST_NOTE" ]]; then
 	  echo -e "${SUBJECT_PREFIX}\`-${COLOR_NOTE}${NOTE}${COLOR_CLEAR}"
 	else
 	  echo -e "${SUBJECT_PREFIX}|-${COLOR_NOTE}${NOTE}${COLOR_CLEAR}"
@@ -229,25 +229,25 @@ cmd_add() {
   if [ -z "$1" ]; then
     echo -n "Please enter sheet[$SHEET]: "
     read _SHEET
-    if [ ! -z $_SHEET ]; then SHEET=$_SHEET; fi
+    if [ ! -z "$_SHEET" ]; then SHEET="$_SHEET"; fi
   else
-    SHEET=$1
+    SHEET="$1"
   fi
 
   if [ -z "$2" ]; then
     echo -n "Please enter subject[$SUBJECT]: "
     read _SUBJECT
-    if [ ! -z $_SUBJECT ]; then SUBJECT=$_SUBJECT; fi
+    if [ ! -z "$_SUBJECT" ]; then SUBJECT="$_SUBJECT"; fi
   else
-    SUBJECT=$2
+    SUBJECT="$2"
   fi
 
   if [ -z "$3" ]; then
     echo -n "Please enter note[$NOTE]: "
     read _NOTE
-    if [ ! -z $_NOTE ]; then NOTE=$_NOTE; fi
+    if [ ! -z "$_NOTE" ]; then NOTE="$_NOTE"; fi
   else
-    NOTE=$3
+    NOTE="$3"
   fi
 
   if [ -f "${ROOT_FOLDER}/${SHEET}/${SUBJECT}/${NOTE}" ]; then
@@ -255,14 +255,14 @@ cmd_add() {
     exit 1
   fi
 
-  mkdir -p $ROOT_FOLDER/$SHEET/$SUBJECT 2> /dev/null
-  cat > $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE << "EOF"
+  mkdir -p "${ROOT_FOLDER}/${SHEET}/${SUBJECT}" 2> /dev/null
+  cat > "${ROOT_FOLDER}/${SHEET}/${SUBJECT}/${NOTE}" << "EOF"
 ## Hi! This is the place where you want to write your note. Lines that start
 ## with '##' will not be printed, lines that start with '#' will be formatted
 ## as a comment and the rest as code!
 
 EOF
-  $EDITOR $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE
+  $EDITOR "${ROOT_FOLDER}/${SHEET}/${SUBJECT}/${NOTE}"
 
   git_commit "add $SHEET/$SUBJECT/$NOTE"
   save_history
@@ -275,36 +275,36 @@ cmd_edit() {
   if [ -z "$1" ]; then
     echo -n "Please enter sheet[$SHEET]: "
     read _SHEET
-    if [ ! -z $_SHEET ]; then SHEET=$_SHEET; fi
+    if [ ! -z "$_SHEET" ]; then SHEET="$_SHEET"; fi
   else
-    SHEET=$1
+    SHEET="$1"
   fi
 
   if [ -z "$2" ]; then
     echo -n "Please enter subject[$SUBJECT]: "
     read _SUBJECT
-    if [ ! -z $_SUBJECT ]; then SUBJECT=$_SUBJECT; fi
+    if [ ! -z "$_SUBJECT" ]; then SUBJECT="$_SUBJECT"; fi
   else
-    SUBJECT=$2
+    SUBJECT="$2"
   fi
 
   if [ -z "$3" ]; then
     echo -n "Please enter note[$NOTE]: "
     read _NOTE
-    if [ ! -z $_NOTE ]; then NOTE=$_NOTE; fi
+    if [ ! -z "$_NOTE" ]; then NOTE="$_NOTE"; fi
   else
-    NOTE=$3
+    NOTE="$3"
   fi
 
-  if [ -f $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE ]; then
-    $EDITOR $ROOT_FOLDER/$SHEET/$SUBJECT/$NOTE
+  if [ -f "${ROOT_FOLDER}/${SHEET}/${SUBJECT}/${NOTE}" ]; then
+    $EDITOR "${ROOT_FOLDER}/${SHEET}/${SUBJECT}/${NOTE}"
   else
     echo "Couldn't find that note, please check if it exists using the following command:"
-    echo "  $PROGRAM --list"
+    echo "  ${PROGRAM} --list"
     exit 1
   fi
 
-  git_commit "edit $SHEET/$SUBJECT/$NODE"
+  git_commit "edit ${SHEET}/${SUBJECT}/${NOTE}"
   save_history
   exit 0
 }
@@ -321,12 +321,12 @@ cmd_delete() {
     echo -n "Delete $1? Are you sure?[yes/no]:"
     read ANSWER
     if [ "$ANSWER" == "yes" ]; then
-      if [ -d $ROOT_FOLDER/$1 ]; then
-	rm -rf $ROOT_FOLDER/$1
+      if [ -d "${ROOT_FOLDER}/$1" ]; then
+	      rm -rf "${ROOT_FOLDER:?}/$1"
       else
-	echo "Couldn't find $1, please check if it exists using the following command:"
-	echo "  $PROGRAM --list"
-	exit 1
+	      echo "Couldn't find $1, please check if it exists using the following command:"
+	      echo "  ${PROGRAM} --list"
+	      exit 1
       fi
       git_commit "delete $1"
     fi
@@ -337,12 +337,12 @@ cmd_delete() {
     echo -n "Delete $1/$2? Are you sure?[yes/no]:"
     read ANSWER
     if [ "$ANSWER" == "yes" ]; then
-      if [ -d $ROOT_FOLDER/$1/$2 ]; then
-	rm -rf $ROOT_FOLDER/$1/$2
+      if [ -d "${ROOT_FOLDER}/$1/$2" ]; then
+	      rm -rf "${ROOT_FOLDER:?}/$1/$2"
       else
-	echo "Couldn't find $1/$2, please check if it exists using the following command:"
-	echo "  $PROGRAM --list"
-	exit 1
+	      echo "Couldn't find $1/$2, please check if it exists using the following command:"
+	      echo "  ${PROGRAM} --list"
+	      exit 1
       fi
       git_commit "delete $1/$2"
     fi
@@ -351,11 +351,11 @@ cmd_delete() {
     echo -n "Delete $1/$2/$3? Are you sure?[yes/no]:"
     read ANSWER
     if [ "$ANSWER" == "yes" ]; then
-      if [ -f $ROOT_FOLDER/$1/$2/$3 ]; then
-	rm $ROOT_FOLDER/$1/$2/$3
+      if [ -f "${ROOT_FOLDER}/$1/$2/$3" ]; then
+	rm "${ROOT_FOLDER}/$1/$2/$3"
       else
 	echo "Couldn't find $1/$2/$3, please check if it exists using the following command:"
-	echo "  $PROGRAM --list"
+	echo "  ${PROGRAM} --list"
 	exit 1
       fi
       git_commit "delete $1/$2/$3"
@@ -367,10 +367,11 @@ cmd_delete() {
 cmd_git() {
   folder_check
 
-  PWD_BUF=$PWD
-  cd $ROOT_FOLDER
+  PWD_BUF="$PWD"
+  cd "$ROOT_FOLDER"
+  # shellcheck disable=SC2068
   git $@
-  PWD=$PWD_BUF
+  PWD="$PWD_BUF"
 
   exit 0
 }
@@ -379,24 +380,24 @@ cmd_show_subject() {
   folder_check
 
   NOTE_FOUND=0
-  SHEETS=($(ls $ROOT_FOLDER))
-  for SHEET in ${SHEETS[@]}; do
-    if [ -d $ROOT_FOLDER/$SHEET/$1 ]; then
+  SHEETS=($(ls "$ROOT_FOLDER"))
+  for SHEET in "${SHEETS[@]}"; do
+    if [ -d "${ROOT_FOLDER}/${SHEET}/$1" ]; then
       if [ -z "$2" ]; then
-	NOTES=($(ls $ROOT_FOLDER/$SHEET/$1))
+	      NOTES=($(ls "${ROOT_FOLDER}/${SHEET}/$1"))
       else
-	if [ -f $ROOT_FOLDER/$SHEET/$1/$2 ]; then
-	  NOTES=($2)
-	fi
+      	if [ -f "${ROOT_FOLDER}/${SHEET}/$1/$2" ]; then
+      	  NOTES=($2)
+      	fi
       fi
-      if [ ! -z "$NOTES" ]; then
-        for NOTE in ${NOTES[@]}; do
-	  echo -e $COLOR_SUBJECT
-	  echo "# Sheet: ${SHEET}"
-	  echo "# Subject: ${1}"
-	  echo "# Note: ${NOTE}"
-	  echo -e $COLOR_CLEAR
-	  colorize_output $ROOT_FOLDER/$SHEET/$1/$NOTE
+      if [ "${#NOTES[@]}" -ne 0 ]; then
+        for NOTE in "${NOTES[@]}"; do
+      	  echo -e "$COLOR_SUBJECT"
+      	  echo "# Sheet: ${SHEET}"
+      	  echo "# Subject: ${1}"
+      	  echo "# Note: ${NOTE}"
+      	  echo -e "$COLOR_CLEAR"
+      	  colorize_output "${ROOT_FOLDER}/${SHEET}/$1/${NOTE}"
           NOTE_FOUND=1
         done
       fi
@@ -404,7 +405,7 @@ cmd_show_subject() {
   done
 
   if [[ $NOTE_FOUND == 0 ]]; then
-    SEARCH_RESULTS=$(grep -Ri "$1" $ROOT_FOLDER | awk -F '/.wut/' '{ if ( $2 !~ /^\.git.*$|^\.history.*$/ ) { print $2 } }' | awk -F ':' '{ print "* " $1 }' | sort | uniq )
+    SEARCH_RESULTS="$(grep -Ri "$1" "$ROOT_FOLDER" | awk -F '/.wut/' '{ if ( $2 !~ /^\.git.*$|^\.history.*$/ ) { print $2 } }' | awk -F ':' '{ print "* " $1 }' | sort | uniq )"
     if [ -z "$SEARCH_RESULTS" ]; then
       echo "$USAGE"
       exit 1
@@ -429,13 +430,13 @@ case "$1" in
   -v|--version) shift;  cmd_version "$@" ;;
 esac
 
-if [ -z $1 ]; then
+if [ -z "$1" ]; then
   if [ "$LESS_WUT" -eq "1" ]; then
     cmd_list | less -R
   else
     cmd_list
   fi
 else
-  cmd_show_subject $@
+  cmd_show_subject "$@"
 fi
 

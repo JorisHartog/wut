@@ -1,0 +1,9 @@
+stages:
+  - test
+
+lint:
+  script:
+    - yum install -q -y epel-release
+    - yum install -q -y ShellCheck
+    - shellcheck bin/wut
+  type: test
